@@ -1,14 +1,10 @@
----
-name: safe-terminal-executor
-description: Safe terminal executor. Triggers when executing HTTP API tests, backend endpoint verification, curl/wget requests. Forces all network commands to be wrapped as Node.js scripts with timeout protection, guaranteed process exit, and log output.
-tags: [terminal, http, api-testing, safety, timeout]
-version: 2.5.0
+# Safe Terminal Executor / 安全终端执行器
 
----
+## Core Rule: No Bare Commands — Everything Through Scripts / 核心规则：禁止裸命令——所有操作通过脚本执行
 
-# Safe Terminal Executor
+安全包装所有网络请求（curl/wget），强制带超时保护 + 进程退出保证 + 日志输出，防止命令卡死。
 
-## Core Rule: No Bare Commands — Everything Through Scripts
+Safe wrapper for all network requests (curl/wget). Enforces timeout protection + guaranteed process exit + log output to prevent hung commands.
 
 | Command Type | Handling |
 |-------------|----------|

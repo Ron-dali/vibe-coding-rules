@@ -1,16 +1,10 @@
----
-name: changelog
-description: Changelog writer. Triggers after code changes + self-check + tests all pass. Writes changes in standard format to project changelog. Supports pipeline.json configuration for path and format.
-tags: [changelog, documentation, logging, pipeline]
-version: 2.5.0
+# Changelog / 变更日志
 
----
+## Overview / 概述
 
-# Changelog
+代码修改→自检通过→测试通过后的最后一步：将改动写入项目变更日志。
 
-## Overview
-
-Final step after code changes complete, self-check passes, and tests pass: write changes to project changelog.
+Final step after code changes complete, self-check passes, and tests pass: write changes to project changelog. 支持自增长检测（发现重复Bug→自动升级规则）、反膨胀清理、一键分享导出。
 
 ## Write Format
 

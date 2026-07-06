@@ -1,5 +1,6 @@
-# pipeline-init — Project Initialization Wizard
+# pipeline-init — Project Initialization Wizard / 项目初始化向导
 
+> 对话式信息采集 → 依赖检测 → 脚手架创建 → 流水线模板复刻 → 一步到位。
 > Conversational project info collection → dependency detection → scaffold creation → pipeline template fork → ready in one go.
 
 ## Trigger Conditions
@@ -9,7 +10,7 @@ Activate when any of the following occurs:
 - Memory trigger hits new-project intent
 - User mentions starting a new project
 
-## Workflow
+## Workflow / 工作流程
 
 ### Step 0: Language Selection
 

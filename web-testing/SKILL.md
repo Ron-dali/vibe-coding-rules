@@ -1,16 +1,10 @@
----
-name: web-testing
-description: Automated web application testing. Uses Playwright (browser interaction + DOM assertion) + tesseract.js (OCR screenshot text verification). Supports pipeline.json configuration for project URL, port, and DOM selectors.
-tags: [testing, web, playwright, ocr, automation, pipeline]
-version: 2.5.0
+# Web Automated Testing / Web自动化测试
 
----
+## Overview / 概述
 
-# Web Automated Testing
+自动化浏览器测试技能。使用 Playwright 进行浏览器交互与 DOM 断言，tesseract.js 做 OCR 截图文字验证。支持冒烟测试、全量测试、截图回归测试。
 
-## Overview
-
-Automated browser testing Skill. Uses Playwright for browser interaction and DOM assertions, tesseract.js for OCR screenshot text verification.
+Automated browser testing Skill. Uses Playwright for browser interaction and DOM assertions, tesseract.js for OCR screenshot text verification. Supports smoke tests, full tests, and screenshot regression testing.
 
 ## Trigger Conditions
 
@@ -27,7 +21,7 @@ Automated browser testing Skill. Uses Playwright for browser interaction and DOM
 | `{{pipeline.project.testPagePath}}` | Test page path | `/` |
 | `{{pipeline.paths.tests}}` | Test script directory | `tests/auto/` |
 
-## Test Types
+## Test Types / 测试类型
 
 ### 1. Smoke Test (fast, always run)
 - Page loads successfully

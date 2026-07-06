@@ -1,13 +1,6 @@
----
-name: coding-principles
-description: Mandatory activation — 5 AI coding principles applied to every conversation. V2.5 breadcrumb pre-scan + 3 common coding traps. Regardless of task type, self-check all 5 principles before outputting any code.
-tags: [ai-coding, programming-principles, code-quality, mandatory, breadcrumb]
-version: 2.5.0
+# Mandatory: AI Coding 5 Principles / AI编程五大原则（每次对话强制激活）
 
----
-
-# Mandatory: AI Coding 5 Principles (Activated Every Conversation)
-
+> **强制纪律。每次输出代码前必须自我检查五大原则。**
 > **Mandatory rule. Must self-check principles before every coding instruction.**
 
 ## Usage Rules
@@ -30,7 +23,7 @@ version: 2.5.0
 □ Trap B — Select Fake-Selection: No `selected` attribute → browser shows first option by default. Always add a placeholder `<option>`.
 □ Trap C — POST-as-UPSERT: UPDATE branch must NOT hardcode fields. Always read from `req.body`.
 
-## The Five Principles
+## The Five Principles / 五大原则
 
 | # | Principle | Core Idea | Correct Approach |
 |---|-----------|-----------|------------------|
@@ -57,7 +50,7 @@ version: 2.5.0
 
 **Why this matters**: Without breadcrumbs, each AI session starts from zero context. With breadcrumbs, opening a file instantly reveals what else depends on it — the AI navigates the project like following a map instead of groping in the dark.
 
-## Common Traps
+## Common Traps / 常见陷阱
 
 | # | Trap | Wrong Pattern | Correct Pattern |
 |---|------|--------------|-----------------|

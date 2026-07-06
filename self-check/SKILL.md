@@ -1,14 +1,8 @@
----
-name: self-check
-description: Mandatory post-code-change self-check checklist. Includes 28 universal programming discipline rules, code-type index matrix, configurable registration/truncation/dual-entry checks, V2.5 four-hop chain loop + breadcrumb auto-seeding. Triggers after every code change. Supports pipeline.json project configuration.
-tags: [self-check, code-review, checklist, quality, pipeline, breadcrumb]
-version: 2.5.0
+# Post-Code-Change Self-Check V2.5 / 代码修改后自检 V2.5
 
----
+## Overview / 概述
 
-# Post-Code-Change Self-Check V2.5
-
-## Overview
+每次代码修改后的强制自检流程。逐项遍历 28 条规则，防止重复已知 Bug 模式。V2.5 新增面包屑自动播种——每次文件修改自动植入 AI 导航面包屑。
 
 Mandatory self-check process after every code change. Iterates through 28 rules item by item to prevent repeating known bug patterns. V2.5 adds breadcrumb auto-seeding — every file change automatically plants AI-navigable breadcrumbs.
 
@@ -24,7 +18,7 @@ Mandatory self-check process after every code change. Iterates through 28 rules 
 - Modifying Express routes
 - Modifying database schema
 
-## Self-Check Workflow
+## Self-Check Workflow / 自检流程
 
 ### Step -1: Pre-Modification Anchor Scan (V2.4+)
 
