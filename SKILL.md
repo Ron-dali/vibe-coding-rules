@@ -1,15 +1,14 @@
 ---
 name: Vibe Coding Rules
 id: vibe-coding-rules
-version: 1.0.1
+version: 2.5.2
 primary: true
 description: >
-  【6合1】AI编程流水线技能包。改前自查→安全执行→改后自检(28条规则)→自动测试(Playwright+OCR)→变更日志(自增长)。
-  支持CodeBuddy/Cursor/Windsurf等所有主流AI编码Agent。流水线自动闭环，对抗AI遗忘Bug。
-  🍞面包屑系统V2.5：每次代码修改自动播种导航标记，文件记住耦合关系+历史坑位+设计文档链接。
-  信任分级规则自生长：重复Bug自动升级为硬规则。开源Apache2.0，一键安装。
-  【6-in-1】AI coding pipeline skills. Pre-check → Safe exec → Post-check(28 rules) → Auto-test(Playwright+OCR) → Changelog(self-growing).
-  🍞 V2.5 breadcrumb auto-seeding prevents AI amnesia. Trust-tiered rule growth. One-click install.
+  6个自我进化的AI编程纪律Skill。改代码前强制自查→安全执行→改后28条规则扫描→自动化测试→变更日志，一条龙闭环。
+  🍞独家面包屑系统：文件自动记住耦合关系和历史坑位。信任分级规则自生长：重复Bug升级为硬规则。
+  由代码小白用AI写14万行代码的踩坑经验沉淀。支持CodeBuddy/Cursor/Windsurf。Apache 2.0。
+  6 self-evolving AI coding discipline Skills. Pre-check → Safe exec → 28-rule post-check → Auto-test → Changelog. Closed loop.
+  🍞 Breadcrumb auto-seeding. Trust-tiered rule growth. Built from 140K lines of real-world pain. Apache 2.0.
 tags:
   - vibe-coding
   - ai-coding
@@ -19,6 +18,8 @@ tags:
   - self-check
   - testing
   - pipeline
+  - breadcrumb
+  - self-growing
 category: 开发工具
 author: 躺不平联盟
 website: https://tangbuping.com
@@ -33,6 +34,31 @@ license: Apache-2.0
 >
 > **AI's biggest enemy is itself — it forgets the bugs it fixed yesterday.**
 > 6 self-evolving Skills. Pre-check → Safe exec → Post-check → Auto-test → Changelog. Closed loop.
+
+---
+
+## ⚡ Before & After / 装前装后
+
+| 场景 | 没装之前 | 装了之后 |
+|:--|:--|:--|
+| 数值 0 被当 false 吞掉 | 每次排查半小时 | coding-principles 改前就拦住了 |
+| `<select>` 假选中 | 用户反馈才修 | safe-terminal-executor 脚本自验证 |
+| 同一个 Bug 犯第 3 次 | AI 毫无记忆 | self-check 自动升级为硬规则，永不再犯 |
+| 改完代码不知道影响谁 | 发布后炸了才知道 | 🍞面包屑标出耦合文件，改前就提醒 |
+
+---
+
+## 📦 Install / 安装
+
+```bash
+# CodeBuddy / Cursor / Windsurf
+openclaw skills install @ron-dali/vibe-coding-rules
+
+# 或手动
+git clone https://github.com/Ron-dali/vibe-coding-rules.git
+```
+
+安装后对 AI 说：**"初始化流水线"**，AI 自动检测项目并配置。
 
 ---
 
@@ -65,11 +91,6 @@ coding-principles (5 Principles + 🍞 Breadcrumb Pre-scan / 改前五大原则 
 - 🍞 **Breadcrumb System V2.5 / 面包屑系统** — Auto-plant coupled files + historical gotchas in file headers, AI never forgets / 文件头部自动播种耦合关系+历史坑位，AI不再失忆
 - 🎯 **Trust-Tiered Growth / 信任分级** — Tier0 Observation Pool → Tier1 [SOFT] → Tier2 [HARD], auto promote/demote / 观察池→软规则→硬规则，自动晋升退役
 - 🌍 **Cross-Platform / 跨界兼容** — Works with CodeBuddy, Cursor, Windsurf / 三种AI Agent通用
-
-## How It Works / 安装后触发方式
-
-Run `pipeline-init` once after installation. The AI will auto-detect project intent and bootstrap the pipeline. Other Skills auto-trigger at the right moment during daily coding.
-安装后执行一次 `pipeline-init`，AI 会在对话中自动检测项目意图并初始化流水线。日常编码中，其他 Skill 会在合适的时机自动触发。
 
 ## Who Needs This? / 谁需要这个？
 
