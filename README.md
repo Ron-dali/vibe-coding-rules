@@ -11,17 +11,17 @@
 
 ## 🤔 为什么需要这个？/ Why do you need this?
 
-用 AI 写代码的人都会遇到：
+用 AI 写代码的人都会遇到 / If you code with AI, you know these pains:
 
 | 痛点 / Pain | 表现 / Symptom |
 |:--|:--|
-| 🧠 **AI 失忆** | 昨天修好的 Bug 今天原样重现。改 B 模块时破坏 A 模块 |
-| 🔁 **重复踩坑** | 同样的错误（`\|\|` 吞 0、select 假选中）犯了又犯 |
-| 📝 **改完不知道改了什么** | 没有变更记录，不知道动了哪些文件、影响了什么 |
-| 🧪 **改完不知道坏了没有** | 改一行代码导致整个页面挂了，手动回归测试太累 |
-| 🗺️ **项目越大越迷路** | 打开一个文件，不知道它关联哪些文件、上次怎么改的 |
+| 🧠 **AI 失忆 / Amnesia** | 昨天修好的 Bug 今天原样重现。改 B 模块时破坏 A 模块。<br>Bug you fixed yesterday? Back today. Fix module A, break module B. |
+| 🔁 **重复踩坑 / Repeat Mistakes** | 同样的错误（`\|\|` 吞 0、select 假选中）犯了又犯。<br>Same traps (`\|\|` eats `0`, select pseudo-select) over and over. |
+| 📝 **改完不知道改了什么 / No Trace** | 没有变更记录，不知道动了哪些文件、影响了什么。<br>No changelog. What did I touch? What did I break? |
+| 🧪 **改完不知道坏了没有 / No Regression** | 改一行 CSS 导致整个页面挂了，手动回归太累。<br>One CSS line → entire page broken. Manual testing is exhausting. |
+| 🗺️ **项目越大越迷路 / Lost in Code** | 打开一个文件，不知道它关联了谁、上次怎么改的。<br>Open a file. What's coupled to it? How was it last modified? |
 
-**Vibe Coding Rules 就是来解决这些的。**
+**Vibe Coding Rules solves all of these.**
 
 ---
 
@@ -30,129 +30,139 @@
 ```
                     ┌──────────────────────────────────────────┐
                     │         🥇 coding-principles             │
-                    │    改代码前：五大原则 + 面包屑预扫描       │
-                    │    "先想清楚，再做减法，精准修改"          │
+                    │    改前自查 / Pre-code: 5 principles      │
+                    │    + 🍞 breadcrumb pre-scan               │
                     └──────────────┬───────────────────────────┘
                                    │
                     ┌──────────────▼───────────────────────────┐
                     │      🛡️ safe-terminal-executor           │
-                    │    执行终端命令：超时保护 + 强制退出       │
-                    │    "curl/wget 必须包在 Node 脚本里"        │
+                    │    安全终端 / Safe terminal execution      │
+                    │    timeout + guaranteed exit              │
                     └──────────────┬───────────────────────────┘
                                    │
                     ┌──────────────▼───────────────────────────┐
                     │         🔍 self-check                    │
-                    │    改代码后：28条规则 + 信任分级自检       │
-                    │    + 🍞 面包屑自动播种"改哪撒哪"           │
+                    │    改后自检 / Post-change: 28 rules       │
+                    │    + 🍞 breadcrumb auto-seeding            │
                     └──────────────┬───────────────────────────┘
                                    │
                     ┌──────────────▼───────────────────────────┐
                     │        🧪 web-testing                    │
-                    │    自动化回归：DOM 断言 + 截图 + OCR       │
-                    │    "改完代码自动跑一遍，看坏了没有"         │
+                    │    回归测试 / Regression: DOM+screen+OCR  │
+                    │    auto browser testing                   │
                     └──────────────┬───────────────────────────┘
                                    │
                     ┌──────────────▼───────────────────────────┐
                     │        📝 changelog                      │
-                    │    变更日志自动生成 + 生长检测             │
-                    │    "每次改了什么、学了什么，记录在案"       │
+                    │    变更日志 / Changelog + growth detect   │
+                    │    what changed + what was learned        │
                     └──────────────┬───────────────────────────┘
                                    │
                               git commit
-                              ✅ 闭环交付
+                              ✅ Closed Loop
 ```
 
 ---
 
-### 🥇 coding-principles — 改前五大原则
+### 🥇 coding-principles — 改前五大原则 / Pre-Code 5 Principles
 
 > **在 AI 输出代码之前，强制它先过一遍脑子。**
+> **Forces AI to think before spitting out code.**
 
-| 原则 | 问什么 |
+| 原则 / Principle | 问什么 / What it checks |
 |:--|:--|
-| 🍞 **面包屑预扫描** | 打开文件先看 🍞 头部——这个文件关联了谁？（V2.5 新增） |
-| 1️⃣ **先想清楚** | 我真的理解问题了吗？我确定在改正确的文件？ |
-| 2️⃣ **做减法** | 能不能删代码解决？我是不是在过度工程化？ |
-| 3️⃣ **精准修改** | 只改必须改的，有没有碰了无关代码？ |
-| 4️⃣ **目标驱动** | 改完能跑吗？JS + CSS + Template 三端都检查了吗？ |
+| 🍞 **Breadcrumb Pre-scan** | 打开文件先看 🍞 头部——这个文件关联了谁？（V2.5）<br>Read 🍞 header first — what's coupled to this file? |
+| 1️⃣ **Think First** | 我真的理解问题了吗？确定在改正确的文件？<br>Do I understand the problem? Am I touching the right file? |
+| 2️⃣ **Subtract First** | 能不能删代码解决？是不是在过度工程化？<br>Can deletion fix this? Am I over-engineering? |
+| 3️⃣ **Surgical Change** | 只改必须改的，有没有碰了无关代码？<br>Minimal change. Did I touch anything unrelated? |
+| 4️⃣ **It Must Run** | 改完能跑吗？JS + CSS + Template 三端都检查了吗？<br>Does it run? JS + CSS + Template — all checked? |
 
-+3 个常见陷阱自动拦截：`||` 吞 0 / select 假选中 / POST 硬编码
++3 个常见陷阱自动拦截 / +3 auto-trap detection：`\|\|` eats `0` / select pseudo-select / POST hardcoded fields
 
 ---
 
-### 🛡️ safe-terminal-executor — 安全终端
+### 🛡️ safe-terminal-executor — 安全终端 / Safe Terminal
 
 > **禁止裸跑网络命令。所有 curl/wget 包裹成 Node 脚本——超时保护、强制退出、日志留存。**
+> **No bare network commands. All curl/wget wrapped as Node scripts — timeout protection, guaranteed exit, log output.**
 
-你永远不会看到 AI 执行一个失控的 curl 请求卡死 5 分钟。
+You will never see an AI curl request hanging for 5 minutes again.
 
 ---
 
-### 🔍 self-check — 改后 28 条自检 + 🍞 面包屑
+### 🔍 self-check — 改后 28 条自检 + 🍞 面包屑 / Post-Change 28-Rule Check
 
 > **代码改完不是结束。28 条规则逐项检查，三条信任轨道自动化。**
+> **Code change isn't done. 28 rules checked. 3 trust tiers. Fully automated.**
 
-| 轨道 | 行为 | 累积后 |
+| 轨道 / Tier | 行为 / Behavior | 累积后 / Promotes at |
 |:--|:--|:--|
-| Tier 0 观察池 | 仅记录不阻断 | — |
-| Tier 1 软规则 | 警告，可放过 | 置信度 ≥ 3 |
-| Tier 2 硬规则 | 阻断，必须修 | 置信度 ≥ 5 |
+| Tier 0 Observation | 仅记录不阻断 / Record only | — |
+| Tier 1 Soft Rule | 警告，可放过 / Warn, skippable | Confidence ≥ 3 |
+| Tier 2 Hard Rule | 阻断，必须修 / Block, must fix | Confidence ≥ 5 |
 
 **规则会自动生长**——今天踩的坑，明天变成 AI 不能再犯的硬规则。误报过多自动退役，全程不需要人审核。
+**Self-growing rules** — today's pitfall becomes tomorrow's hard rule. False positives auto-retire. Zero manual review.
 
 ---
 
-#### 🍞 面包屑系统（V2.5 核心特性）
+#### 🍞 面包屑系统 — The Soul of V2.5
 
 这是整套工具的**灵魂机制**。改代码时 AI 会在文件头部自动播种"面包屑"：
+This is **the soul** of the entire toolkit. AI auto-plants breadcrumbs in file headers:
 
 ```markdown
 <!-- 🍞 BREADCRUMBS
 @COUPLED: chat-core.js, wf-builder.js
-📖 关联文档: 开发文档/架构设计/chat-architecture.md
-@GOTCHA: 这里的状态机在 openTab() 里被重置，改 tab 顺序要同步
-@BUGFIX: 2026-07-01 修复移动端 overflow 导致的布局崩塌
+📖 Docs: dev-docs/architecture/chat.md
+@GOTCHA: State machine resets in openTab(), sync tab order changes
+@BUGFIX: 2026-07-01 Fixed mobile overflow layout collapse
 -->
 ```
 
-- **改前扫描**：AI 打开文件时先读 🍞 头部，知道这个文件跟谁耦合、踩过什么坑
-- **改后播种**：改完自动更新 🍞，下次 AI 再打开时就不会"失忆"
-- **四环闭环**：改代码 → 自检 → 更新文档 → 播种面包屑 → 下次改代码时有了完整地图
+- **改前扫描 / Pre-scan**：AI 打开文件先读 🍞，知道耦合关系和历史坑位<br>AI reads 🍞 header first — knows couplings & past pitfalls
+- **改后播种 / Post-seed**：改完自动更新 🍞，下次 AI 不再失忆<br>Auto-updates 🍞 after changes — AI never forgets again
+- **四环闭环 / 4-Loop Closure**：改代码 → 自检 → 更新文档 → 播种面包屑 → 下次改代码时有完整地图<br>Code → Check → Doc update → Seed breadcrumb → Next time has full map
 
 ---
 
-### 🧪 web-testing — 自动化回归测试
+### 🧪 web-testing — 自动化回归测试 / Auto Regression Test
 
 > **改完代码自动打开浏览器，跑 DOM 断言 + 截图 + OCR 文字验证。**
+> **Auto-opens browser after changes. DOM assertion + Screenshot + OCR text verification.**
 
-| 检测方式 | 做什么 |
+| 检测方式 / Method | 做什么 / What it does |
 |:--|:--|
-| DOM 断言 | 关键元素在不在？按钮能不能点？ |
-| 截图对比 | 跟上次截图比，布局有没有崩？ |
-| OCR 验证 | 页面上的文字对不对？ |
+| DOM 断言 / DOM Assertion | 关键元素在不在？按钮能不能点？<br>Key element present? Button clickable? |
+| 截图对比 / Screenshot Diff | 跟上次截图比，布局有没有崩？<br>Layout broken vs. last screenshot? |
+| OCR 验证 / OCR Check | 页面上的文字对不对？<br>Text on page correct? |
 
 改一行 CSS 不会悄无声息地炸掉整个页面。
+One CSS line won't silently destroy your entire page.
 
 ---
 
-### 📝 changelog — 变更日志 + 生长检测
+### 📝 changelog — 变更日志 + 生长检测 / Changelog + Growth Detection
 
 > **每次交付自动记录：改了什么、学了什么、规则有没有进化。**
+> **Auto-records every delivery: what changed, what was learned, did rules evolve.**
 
-| 内容 | 说明 |
+| 内容 / What | 说明 / Details |
 |:--|:--|
-| 改动概述 | 改了哪些文件、新增/删除行数 |
-| 新增依赖 | 是不是加了新包 |
-| 自检结果 | 28 条规则通过了多少 |
-| 生长事件 | 今天有规则从观察池晋升到硬规则了吗？ |
+| 改动概述 / Changes | 改了哪些文件、新增/删除行数<br>Which files, lines added/removed |
+| 新增依赖 / New Deps | 是不是加了新包<br>New packages installed? |
+| 自检结果 / Self-Check | 28 条规则通过了多少<br>28 rules — how many passed? |
+| 生长事件 / Growth | 今天有规则从观察池晋升到硬规则了吗？<br>Any rule promoted from observation to hard today?
 
 ---
 
-### 🚀 pipeline-init — 一键初始化
+### 🚀 pipeline-init — 一键初始化 / One-Click Bootstrap
 
 > **新项目：对话式问答 → 自动创建流水线 → 开箱即用。**
+> **New project: conversational Q&A → auto-create pipeline → ready to go.**
 
 你说"我要做一个 XX 项目"，AI 问 4 个问题（项目名/技术栈/类型/要不要自动测试），一分钟搭好全部质量基础设施。
+Say "I want to build X." AI asks 4 questions (name/stack/type/auto-test?). One minute. Complete quality infra deployed.
 
 ---
 
@@ -175,26 +185,27 @@ chmod +x install.sh && ./install.sh
 
 ## 🎯 谁需要这个？/ Who is this for?
 
-| 如果你 | 你需要这个因为 |
+| 如果你 / If you | 你需要这个因为 / You need this because |
 |:--|:--|
-| 🐣 **用 AI 写代码但不懂编程** | 这是你的"编程纪律外骨骼"，AI 不再瞎改 |
-| 💻 **独立开发者 / 一人公司** | 你是你自己的 QA，这 6 个 Skill 就是你的 QA 团队 |
-| 🏢 **小型团队用 AI 辅助开发** | 统一代码质量标准，减少 Code Review 成本 |
-| 🤖 **重度 AI Agent 用户** | 你的 Agent 越用越聪明——规则自生长，不遗忘 |
+| 🐣 **用 AI 写代码但不懂编程 / AI-coder, non-programmer** | 这是你的"编程纪律外骨骼"，AI 不再瞎改<br>Your code-discipline exoskeleton. AI stops reckless edits. |
+| 💻 **独立开发者 / 一人公司 / Solo dev** | 你是你自己的 QA，这 6 个 Skill 就是你的 QA 团队<br>You ARE your own QA. These 6 Skills ARE your QA team. |
+| 🏢 **小型团队用 AI 辅助 / Small team + AI** | 统一代码质量标准，减少 Code Review 成本<br>Unified quality standard. Less code review overhead. |
+| 🤖 **重度 AI Agent 用户 / Heavy AI agent user** | 你的 Agent 越用越聪明——规则自生长，不遗忘<br>Your agent gets smarter over time. Rules grow. Nothing forgotten. |
 
 ---
 
 ## 📖 作者的故事 / Author's Story
 
-**一行代码不懂。**
+**I don't know how to code. Not a single line.**
 
-45 天，纯靠 AI 编程工具，从零搭建出一个横跨 Web + 桌面 + 小程序的 14 万行三端平台（[躺不平联盟](https://tangbuping.com)）。
+45 days. Pure AI coding tools. Built a **140,000-line**, 3-platform (Web + Desktop + MiniApp) product from scratch — [躺不平联盟 (TangBuPing)](https://tangbuping.com), an AI knowledge democracy platform.
 
-过程中最大的痛苦不是 AI 写不出来——而是**它忘了自己写过什么**。昨天修好的 Bug 今天又犯，改了 A 模块炸了 B 模块。
+The biggest pain wasn't AI failing to write code. It was **AI forgetting what it wrote**. Bug fixed yesterday? Back today. Module A fixed, Module B destroyed.
 
-于是把 3 个月的踩坑经验沉淀成这 6 个 Skill，开源出来。
+3 months of battle scars, distilled into these 6 Skills. Open-sourced so you don't have to bleed the same way.
 
 **躺不平不是卷，是让其他人也躺不平。**
+*We don't hustle harder. We make it so others can't stay lying down either.*
 
 ---
 
@@ -205,4 +216,4 @@ chmod +x install.sh && ./install.sh
 
 ## 📄 许可 / License
 
-Apache 2.0 — 自由使用、修改、分发。
+Apache 2.0 — Free to use, modify, distribute. 自由使用、修改、分发。
