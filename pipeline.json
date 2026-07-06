@@ -1,5 +1,5 @@
 {
-  "version": "2.2.0",
+  "version": "2.5.0",
   "project": {
     "name": "My Project",
     "type": "web",
@@ -45,7 +45,7 @@
   },
   "skills": {
     "pipelineInit": { "enabled": true, "name": "pipeline-init" },
-    "principles": { "enabled": true, "name": "karpathy-principles" },
+    "principles": { "enabled": true, "name": "coding-principles" },
     "safeTerminal": { "enabled": true, "name": "safe-terminal-executor" },
     "selfCheck": { "enabled": true, "name": "self-check" },
     "webTesting": { "enabled": true, "name": "web-testing" },

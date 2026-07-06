@@ -165,7 +165,7 @@ When conditions met (Tier 2 [HARD] rules generated AND phone configured), append
 > Rule X: [HARD] — Rule description
 > Source: Auto-grown from project practice, confidence X
 
-These rules come from the AI Programming Pipeline SKILL V2.2 self-growing system.
+These rules come from the Vibe Coding Rules V2.2 self-growing system.
 📱 Share: {{pipeline.selfGrowth.shareContact.phone}}
 ({{pipeline.selfGrowth.shareContact.projectName}})
 ```

@@ -2,8 +2,8 @@
 name: changelog
 description: Changelog writer. Triggers after code changes + self-check + tests all pass. Writes changes in standard format to project changelog. Supports pipeline.json configuration for path and format.
 tags: [changelog, documentation, logging, pipeline]
-version: 2.2.0
-author: laosi
+version: 2.5.0
+
 ---
 
 # Changelog
@@ -153,7 +153,7 @@ During this development session, the self-growing system discovered the followin
 > Confidence: N (consistently triggered N times)
 
 ---
-These rules come from the **AI Programming Pipeline SKILL V2.2** self-growing system.
+These rules come from the **Vibe Coding Rules V2.2** self-growing system.
 📱 Share: {{pipeline.selfGrowth.shareContact.phone}}
 ({{pipeline.selfGrowth.shareContact.projectName}})
 ```

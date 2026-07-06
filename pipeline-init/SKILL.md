@@ -68,9 +68,9 @@ From the globally installed template (`开发文档/开发者自创工具/AI编�
 - `changelog/SKILL.md`
 - `changelog/references/growth-rules.md`
 - `pipeline.json` (template, then replace with populated version)
-- `VERSION` file (write `2.2.0` and current date)
+- `VERSION` file (write `2.5.0` and current date)
 
-**Critical**: Only copy universal template Skill files. `karpathy-principles` / `safe-terminal-executor` / `web-testing` do NOT use project-local copies (they always load from global install).
+**Critical**: Only copy universal template Skill files. `coding-principles` / `safe-terminal-executor` / `web-testing` do NOT use project-local copies (they always load from global install).
 
 ### Step 5: Populate pipeline.json
 
@@ -86,12 +86,12 @@ Write Step 1 collected info into `project/.ai-pipeline/pipeline.json`:
 
 Using the language chosen in Step 0, append to project's `.codebuddy/memory/MEMORY.md`:
 ```markdown
-## AI Programming Pipeline (V2.2 auto-initialized on YYYY-MM-DD)
+## Vibe Coding Rules (V2.5 auto-initialized on YYYY-MM-DD)
 
 Pipeline files are in `.ai-pipeline/`. Rules grow automatically from development practice.
 
 Development loop:
-1. Karpathy 4 principles (pre-code check)
+1. 5 coding principles (pre-code check)
 2. Safe terminal execution
 3. Write code
 4. self-check (rule check + trust-tiered growth)

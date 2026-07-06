@@ -1,12 +1,12 @@
-# AI 编程流水线 SKILL 通用版 V2.2<br>AI Programming Pipeline SKILL — Universal Edition V2.2
+# Vibe Coding Rules V2.5<br>AI 编程流水线 SKILL 通用版 V2.5
 
 > **一套工具，管所有项目。** 来自真实项目（TBP 躺不平联盟）的 3 个月实战沉淀。
 >
 > **One toolkit, all projects.** Battle-tested over 3 months on a real project (TBP).
 >
-> 任何桌面 AI Agent（CodeBuddy / Cursor / Windsurf）一键安装，即刻拥有**会自我进化的**代码质量保障流水线。
+> 任何桌面 AI Agent（CodeBuddy / Cursor / Windsurf）一键安装，即刻拥有**会自我进化的**代码质量保障流水线。V2.5 🍞 面包屑自动播种——每次改代码自动建地图。
 >
-> One-click install for any desktop AI agent — get a **self-evolving** code quality pipeline instantly.
+> One-click install for any desktop AI agent — get a **self-evolving** code quality pipeline instantly. V2.5 breadcrumb auto-seeding — every change plants navigation breadcrumbs.
 
 ---
 
@@ -20,13 +20,13 @@ A quality-assurance methodology developed by non-programmers with AI assistance.
 新项目 → 对话式初始化向导（pipeline-init）
 New project → conversational init wizard (pipeline-init)
   ↓
-改代码前 → 四大原则自检
-Before coding → 4-principle check
+改代码前 → 五大原则 + 🍞面包屑预扫描（V2.5）
+Before coding → 5-principle check + breadcrumb pre-scan (V2.5)
 改代码中 → 终端命令安全封装
 During coding → safe terminal execution
-改代码后 → self-check (24 rules + trust tiers + pattern match)
+改代码后 → self-check (28 rules + trust tiers + 🍞 auto-seeding)
 After coding  → web-testing (DOM + screenshot + OCR)
-              → changelog + growth detection + sharing
+              → changelog + growth detection
               → git commit → closed loop ✅
 ```
 
@@ -103,7 +103,7 @@ Or let the pipeline-init Skill fill it conversationally.
 | pipeline-init | 🆕 项目初始化向导 / Project init wizard | 100% |
 | 编程四大纪律 / Code Discipline | 改前自查：先思考→做减法→精准改→能跑 / Pre-code 4-principle check | 100% |
 | safe-terminal-executor | API/终端安全封装 / Safe terminal wrapper | 100% |
-| self-check | 逐项自检 + 信任分级 / Itemized check + trust tiers | 可配置 / Configurable |
+| self-check | 28条规则 + 信任分级 + 🍞面包屑 / 28 rules + trust tiers + 🍞 breadcrumbs | 可配置 / Configurable |
 | web-testing | 浏览器自动化测试 / Browser automation test | 可配置 / Configurable |
 | changelog | 变更日志 + 生长检测 + 分享 / Changelog + growth + share | 可配置 / Configurable |
 
@@ -125,7 +125,11 @@ Or let the pipeline-init Skill fill it conversationally.
 
 ## 版本 / Versions
 
-- **V2.2（当前 / Current）** — 中英双语 + 版本同步 + 重命名
+- **V2.5.0（当前 / Current）** — 🍞 面包屑自动播种：改前扫描+改后播种
+- **V2.4.1** — 四环链式闭环
+- **V2.4.0** — 三位一体闭环 + 文档规范体系
+- **V2.3.0** — 设计意图锚点 + 注释-文档联动
+- **V2.2.0** — 中英双语 + 版本同步 + 重命名
 - **V2.1.0（自生长版 / Self-Growing）** — 信任分级 + 分享导出
 - **V2.0.0（通用版 / Universal）** — 去耦重构 / Decoupled refactor
 - **V1（TBP原型 / TBP Prototype）** — 姊妹目录 `AI编程自动流水线-TBP原型/`
@@ -136,4 +140,4 @@ Apache 2.0
 
 ## 作者 / Author
 
-laosi
+躺不平联盟

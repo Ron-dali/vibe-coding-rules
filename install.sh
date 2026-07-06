@@ -1,9 +1,9 @@
 #!/bin/bash
 
 echo "========================================"
-echo "  AI编程流水线SKILL通用版 - 安装程序"
-echo "  AI Programming Pipeline SKILL - Installer"
-echo "  Version 2.2.0"
+echo "  Vibe Coding Rules - 安装程序"
+echo "  Vibe Coding Rules - Installer"
+echo "  Version 2.5.0"
 echo "========================================"
 echo ""
 
@@ -38,7 +38,7 @@ echo ""
 if [ "$AGENT_TYPE" = "codebuddy" ]; then
     echo "[INSTALL] Copying skills to CodeBuddy dir... | 复制到 CodeBuddy 目录..."
     
-    cp -r karpathy-principles "$SKILL_DIR/" && echo "  karpathy-principles    [OK]"
+    cp -r coding-principles "$SKILL_DIR/" && echo "  coding-principles       [OK]"
     cp -r safe-terminal-executor "$SKILL_DIR/" && echo "  safe-terminal-executor [OK]"
     cp -r self-check "$SKILL_DIR/" && echo "  self-check             [OK]"
     cp -r web-testing "$SKILL_DIR/" && echo "  web-testing            [OK]"
@@ -49,7 +49,7 @@ if [ "$AGENT_TYPE" = "generic" ]; then
     echo "[INSTALL] Creating .ai-pipeline dir... | 创建 .ai-pipeline 目录..."
     mkdir -p .ai-pipeline
     
-    cp karpathy-principles/.ai-pipeline/prompt.md .ai-pipeline/01-karpathy-principles.md
+    cp coding-principles/.ai-pipeline/prompt.md .ai-pipeline/01-coding-principles.md
     cp safe-terminal-executor/.ai-pipeline/prompt.md .ai-pipeline/02-safe-terminal-executor.md
     cp self-check/.ai-pipeline/prompt.md .ai-pipeline/03-self-check.md
     cp web-testing/.ai-pipeline/prompt.md .ai-pipeline/04-web-testing.md

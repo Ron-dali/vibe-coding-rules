@@ -3,8 +3,8 @@ param(
 )
 
 Write-Host "========================================" -ForegroundColor Cyan
-Write-Host "  AI编程流水线SKILL通用版 - 安装程序" -ForegroundColor Cyan
-Write-Host "  Version 2.0.0 (PowerShell Enhanced)" -ForegroundColor Cyan
+Write-Host "  Vibe Coding Rules - 安装程序" -ForegroundColor Cyan
+Write-Host "  Version 2.5.0 (PowerShell Enhanced)" -ForegroundColor Cyan
 Write-Host "========================================" -ForegroundColor Cyan
 Write-Host ""
 
@@ -104,7 +104,7 @@ function Copy-Skill {
 if ($agentType -eq "codebuddy") {
     Write-Host "[安装] 复制 Skill 到 CodeBuddy 目录（含模板替换）..." -ForegroundColor Cyan
     
-    Copy-Skill "karpathy-principles" "$skillDir\karpathy-principles" "karpathy-principles" $false
+    Copy-Skill "coding-principles" "$skillDir\coding-principles" "coding-principles" $false
     Copy-Skill "safe-terminal-executor" "$skillDir\safe-terminal-executor" "safe-terminal-executor"
     Copy-Skill "self-check" "$skillDir\self-check" "self-check"
     Copy-Skill "web-testing" "$skillDir\web-testing" "web-testing"
@@ -119,7 +119,7 @@ if ($agentType -eq "generic") {
         New-Item -ItemType Directory -Path $aiPipelineDir -Force | Out-Null
     }
     
-    Copy-Item "karpathy-principles\.ai-pipeline\prompt.md" "$aiPipelineDir\01-karpathy-principles.md" -Force
+    Copy-Item "coding-principles\.ai-pipeline\prompt.md" "$aiPipelineDir\01-coding-principles.md" -Force
     Copy-Item "safe-terminal-executor\.ai-pipeline\prompt.md" "$aiPipelineDir\02-safe-terminal-executor.md" -Force
     
     # self-check 含模板变量

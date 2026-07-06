@@ -3,9 +3,9 @@ chcp 65001 >nul
 setlocal enabledelayedexpansion
 
 echo ========================================
-echo   AI编程流水线SKILL通用版 - 安装程序
-echo   AI Programming Pipeline SKILL - Installer
-echo   Version 2.2.0
+echo   Vibe Coding Rules - 安装程序
+echo   Vibe Coding Rules - Installer
+echo   Version 2.5.0
 echo ========================================
 echo.
 
@@ -48,14 +48,14 @@ if "%AGENT_TYPE%"=="codebuddy" (
     
     REM 复制各 Skill
     xcopy /E /I /Y "pipeline-init" "%SKILL_DIR%\pipeline-init\" >nul
-    xcopy /E /I /Y "karpathy-principles" "%SKILL_DIR%\karpathy-principles\" >nul
+    xcopy /E /I /Y "coding-principles" "%SKILL_DIR%\coding-principles\" >nul
     xcopy /E /I /Y "safe-terminal-executor" "%SKILL_DIR%\safe-terminal-executor\" >nul
     xcopy /E /I /Y "self-check" "%SKILL_DIR%\self-check\" >nul
     xcopy /E /I /Y "web-testing" "%SKILL_DIR%\web-testing\" >nul
     xcopy /E /I /Y "changelog" "%SKILL_DIR%\changelog\" >nul
     
     echo   pipeline-init          [OK]
-    echo   karpathy-principles    [OK]
+    echo   coding-principles       [OK]
     echo   safe-terminal-executor [OK]
     echo   self-check             [OK]
     echo   web-testing            [OK]
@@ -84,7 +84,7 @@ if "%AGENT_TYPE%"=="generic" (
     if not exist ".ai-pipeline" mkdir ".ai-pipeline"
     
     REM 复制各 Skill 的 .ai-pipeline 内容
-    copy /Y "karpathy-principles\.ai-pipeline\prompt.md" ".ai-pipeline\01-karpathy-principles.md" >nul
+    copy /Y "coding-principles\.ai-pipeline\prompt.md" ".ai-pipeline\01-coding-principles.md" >nul
     copy /Y "safe-terminal-executor\.ai-pipeline\prompt.md" ".ai-pipeline\02-safe-terminal-executor.md" >nul
     copy /Y "self-check\.ai-pipeline\prompt.md" ".ai-pipeline\03-self-check.md" >nul
     copy /Y "web-testing\.ai-pipeline\prompt.md" ".ai-pipeline\04-web-testing.md" >nul

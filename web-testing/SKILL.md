@@ -2,8 +2,8 @@
 name: web-testing
 description: Automated web application testing. Uses Playwright (browser interaction + DOM assertion) + tesseract.js (OCR screenshot text verification). Supports pipeline.json configuration for project URL, port, and DOM selectors.
 tags: [testing, web, playwright, ocr, automation, pipeline]
-version: 2.0.0
-author: laosi
+version: 2.5.0
+
 ---
 
 # Web Automated Testing
