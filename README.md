@@ -1,65 +1,162 @@
-# Vibe Coding Rules V2.5<br>AI 编程流水线 SKILL 通用版 V2.5
+# Vibe Coding Rules V2.5
 
-> **一套工具，管所有项目。** 来自真实项目（TBP 躺不平联盟）的 3 个月实战沉淀。
+> **AI 写代码最大的敌人，是它自己——它会忘记昨天修好的 Bug，会在同一个坑里反复跌倒。**
 >
-> **One toolkit, all projects.** Battle-tested over 3 months on a real project (TBP).
+> 6 个会自我进化的 Skill，给 AI 装上"编程纪律"。改前自查 → 安全执行 → 改后自检 → 自动测试 → 变更记录。一条流水线，闭环交付。
 >
-> 任何桌面 AI Agent（CodeBuddy / Cursor / Windsurf）一键安装，即刻拥有**会自我进化的**代码质量保障流水线。V2.5 🍞 面包屑自动播种——每次改代码自动建地图。
->
-> One-click install for any desktop AI agent — get a **self-evolving** code quality pipeline instantly. V2.5 breadcrumb auto-seeding — every change plants navigation breadcrumbs.
+> **AI's biggest enemy is itself — it forgets the bugs it fixed yesterday.**
+> 6 self-evolving Skills that install "code discipline" into AI agents. Pre-check → Safe exec → Post-check → Auto-test → Changelog. Closed loop, every time.
 
 ---
 
-## 这是什么？ / What is this?
+## 🤔 为什么需要这个？/ Why do you need this?
 
-非程序员在 AI 辅助下总结的质量保障方法论。从 V1（TBP 项目专用）脱壳为 V2（任何项目通用），V2.1 起实现了**规则自动生长**。
+用 AI 写代码的人都会遇到：
 
-A quality-assurance methodology developed by non-programmers with AI assistance. Evolved from V1 (TBP-specific) to V2 (universal), with **self-growing rules** since V2.1.
+| 痛点 / Pain | 表现 / Symptom |
+|:--|:--|
+| 🧠 **AI 失忆** | 昨天修好的 Bug 今天原样重现。改 B 模块时破坏 A 模块 |
+| 🔁 **重复踩坑** | 同样的错误（`\|\|` 吞 0、select 假选中）犯了又犯 |
+| 📝 **改完不知道改了什么** | 没有变更记录，不知道动了哪些文件、影响了什么 |
+| 🧪 **改完不知道坏了没有** | 改一行代码导致整个页面挂了，手动回归测试太累 |
+| 🗺️ **项目越大越迷路** | 打开一个文件，不知道它关联哪些文件、上次怎么改的 |
+
+**Vibe Coding Rules 就是来解决这些的。**
+
+---
+
+## 🛠️ 6 个 Skill 怎么工作 / How the 6 Skills work
 
 ```
-新项目 → 对话式初始化向导（pipeline-init）
-New project → conversational init wizard (pipeline-init)
-  ↓
-改代码前 → 五大原则 + 🍞面包屑预扫描（V2.5）
-Before coding → 5-principle check + breadcrumb pre-scan (V2.5)
-改代码中 → 终端命令安全封装
-During coding → safe terminal execution
-改代码后 → self-check (28 rules + trust tiers + 🍞 auto-seeding)
-After coding  → web-testing (DOM + screenshot + OCR)
-              → changelog + growth detection
-              → git commit → closed loop ✅
+                    ┌──────────────────────────────────────────┐
+                    │         🥇 coding-principles             │
+                    │    改代码前：五大原则 + 面包屑预扫描       │
+                    │    "先想清楚，再做减法，精准修改"          │
+                    └──────────────┬───────────────────────────┘
+                                   │
+                    ┌──────────────▼───────────────────────────┐
+                    │      🛡️ safe-terminal-executor           │
+                    │    执行终端命令：超时保护 + 强制退出       │
+                    │    "curl/wget 必须包在 Node 脚本里"        │
+                    └──────────────┬───────────────────────────┘
+                                   │
+                    ┌──────────────▼───────────────────────────┐
+                    │         🔍 self-check                    │
+                    │    改代码后：28条规则 + 信任分级自检       │
+                    │    + 🍞 面包屑自动播种"改哪撒哪"           │
+                    └──────────────┬───────────────────────────┘
+                                   │
+                    ┌──────────────▼───────────────────────────┐
+                    │        🧪 web-testing                    │
+                    │    自动化回归：DOM 断言 + 截图 + OCR       │
+                    │    "改完代码自动跑一遍，看坏了没有"         │
+                    └──────────────┬───────────────────────────┘
+                                   │
+                    ┌──────────────▼───────────────────────────┐
+                    │        📝 changelog                      │
+                    │    变更日志自动生成 + 生长检测             │
+                    │    "每次改了什么、学了什么，记录在案"       │
+                    └──────────────┬───────────────────────────┘
+                                   │
+                              git commit
+                              ✅ 闭环交付
 ```
 
-## 🆕 V2.1 新特性 / New Features
+---
 
-### 信任分级规则自生长 / Trust-Tiered Rule Self-Growth
+### 🥇 coding-principles — 改前五大原则
 
-规则不再一成不变。每次开发中踩的坑会自动生长为规则：
-Rules evolve automatically. Every pitfall you encounter becomes a rule:
+> **在 AI 输出代码之前，强制它先过一遍脑子。**
 
-| 级别 Tier | 名称 Name | 行为 Behavior | 晋升条件 Promotion |
-|:--|:--|:--|:--|
-| Tier 0 | 观察池 / Observation Pool | 仅记录 / Record only | 首次发现 / First sight |
-| Tier 1 | [SOFT] 软规则 / Soft Rule | 警告可放过 / Warn, skippable | 置信度 / Confidence ≥ 3 |
-| Tier 2 | [HARD] 硬规则 / Hard Rule | 阻断必改 / Block, must fix | 置信度 / Confidence ≥ 5 |
+| 原则 | 问什么 |
+|:--|:--|
+| 🍞 **面包屑预扫描** | 打开文件先看 🍞 头部——这个文件关联了谁？（V2.5 新增） |
+| 1️⃣ **先想清楚** | 我真的理解问题了吗？我确定在改正确的文件？ |
+| 2️⃣ **做减法** | 能不能删代码解决？我是不是在过度工程化？ |
+| 3️⃣ **精准修改** | 只改必须改的，有没有碰了无关代码？ |
+| 4️⃣ **目标驱动** | 改完能跑吗？JS + CSS + Template 三端都检查了吗？ |
 
-误报过多自动退役，无需人工审核。全程记录在 `growth-log.md`。
-Excessive false positives auto-retire. No manual review needed. Full trace in `growth-log.md`.
++3 个常见陷阱自动拦截：`||` 吞 0 / select 假选中 / POST 硬编码
 
-### 一键分享导出 / One-Click Share Export
+---
 
-Tier 2 规则自动生成分享文本。热心用户可短信分享给开发者。
-Tier 2 rules auto-generate shareable text. Enthusiastic users can SMS-share with the developer.
+### 🛡️ safe-terminal-executor — 安全终端
 
-> 💡 **分享给社区 / Share with the community**：在 `pipeline.json` 中填写 `shareContact.phone`（opt-in），当自生长系统发现 Tier 2 硬规则时，会自动生成可分享的文本。
-> Fill in `shareContact.phone` in `pipeline.json` (opt-in) — when the self-growing system discovers Tier 2 hard rules, shareable text is auto-generated.
+> **禁止裸跑网络命令。所有 curl/wget 包裹成 Node 脚本——超时保护、强制退出、日志留存。**
 
-### 对话式项目初始化 / Conversational Project Init
+你永远不会看到 AI 执行一个失控的 curl 请求卡死 5 分钟。
 
-Agent 自动检测新项目意图，对话式收集信息，一键创建项目结构 + fork 流水线模板。
-Agent auto-detects new-project intent, collects info conversationally, scaffolds + forks the pipeline in one go.
+---
 
-## 安装 / Install
+### 🔍 self-check — 改后 28 条自检 + 🍞 面包屑
+
+> **代码改完不是结束。28 条规则逐项检查，三条信任轨道自动化。**
+
+| 轨道 | 行为 | 累积后 |
+|:--|:--|:--|
+| Tier 0 观察池 | 仅记录不阻断 | — |
+| Tier 1 软规则 | 警告，可放过 | 置信度 ≥ 3 |
+| Tier 2 硬规则 | 阻断，必须修 | 置信度 ≥ 5 |
+
+**规则会自动生长**——今天踩的坑，明天变成 AI 不能再犯的硬规则。误报过多自动退役，全程不需要人审核。
+
+---
+
+#### 🍞 面包屑系统（V2.5 核心特性）
+
+这是整套工具的**灵魂机制**。改代码时 AI 会在文件头部自动播种"面包屑"：
+
+```markdown
+<!-- 🍞 BREADCRUMBS
+@COUPLED: chat-core.js, wf-builder.js
+📖 关联文档: 开发文档/架构设计/chat-architecture.md
+@GOTCHA: 这里的状态机在 openTab() 里被重置，改 tab 顺序要同步
+@BUGFIX: 2026-07-01 修复移动端 overflow 导致的布局崩塌
+-->
+```
+
+- **改前扫描**：AI 打开文件时先读 🍞 头部，知道这个文件跟谁耦合、踩过什么坑
+- **改后播种**：改完自动更新 🍞，下次 AI 再打开时就不会"失忆"
+- **四环闭环**：改代码 → 自检 → 更新文档 → 播种面包屑 → 下次改代码时有了完整地图
+
+---
+
+### 🧪 web-testing — 自动化回归测试
+
+> **改完代码自动打开浏览器，跑 DOM 断言 + 截图 + OCR 文字验证。**
+
+| 检测方式 | 做什么 |
+|:--|:--|
+| DOM 断言 | 关键元素在不在？按钮能不能点？ |
+| 截图对比 | 跟上次截图比，布局有没有崩？ |
+| OCR 验证 | 页面上的文字对不对？ |
+
+改一行 CSS 不会悄无声息地炸掉整个页面。
+
+---
+
+### 📝 changelog — 变更日志 + 生长检测
+
+> **每次交付自动记录：改了什么、学了什么、规则有没有进化。**
+
+| 内容 | 说明 |
+|:--|:--|
+| 改动概述 | 改了哪些文件、新增/删除行数 |
+| 新增依赖 | 是不是加了新包 |
+| 自检结果 | 28 条规则通过了多少 |
+| 生长事件 | 今天有规则从观察池晋升到硬规则了吗？ |
+
+---
+
+### 🚀 pipeline-init — 一键初始化
+
+> **新项目：对话式问答 → 自动创建流水线 → 开箱即用。**
+
+你说"我要做一个 XX 项目"，AI 问 4 个问题（项目名/技术栈/类型/要不要自动测试），一分钟搭好全部质量基础设施。
+
+---
+
+## 📦 安装 / Install
 
 ```bash
 # Windows
@@ -68,76 +165,44 @@ install.bat
 # macOS / Linux
 chmod +x install.sh && ./install.sh
 
-# PowerShell (auto template substitution)
+# PowerShell
 .\install.ps1
 ```
 
-安装后，Agent Memory 中会自动写入新项目检测触发器。下次说"我要做一个XX"时，Agent 会询问是否初始化流水线。
-After install, a new-project detection trigger is written to Agent Memory. Say "I want to build X" and the Agent will offer to initialize the pipeline.
+支持 **CodeBuddy / Cursor / Windsurf** 三种 AI Agent。
 
-## 配置 / Configuration
+---
 
-编辑 `pipeline.json`，填写项目参数：
-Edit `pipeline.json` with your project parameters:
+## 🎯 谁需要这个？/ Who is this for?
 
-```json
-{
-  "project": {
-    "name": "Your Project",
-    "port": 3000,
-    "testUrl": "http://localhost:3000"
-  },
-  "selfGrowth": {
-    "enabled": true
-  }
-}
-```
-
-也可通过 pipeline-init Skill 对话式自动填充。
-Or let the pipeline-init Skill fill it conversationally.
-
-## Skill 清单 / Skill List
-
-| Skill | 功能 / Function | 通用度 / Universal |
-|:--|:--|:--:|
-| pipeline-init | 🆕 项目初始化向导 / Project init wizard | 100% |
-| 编程四大纪律 / Code Discipline | 改前自查：先思考→做减法→精准改→能跑 / Pre-code 4-principle check | 100% |
-| safe-terminal-executor | API/终端安全封装 / Safe terminal wrapper | 100% |
-| self-check | 28条规则 + 信任分级 + 🍞面包屑 / 28 rules + trust tiers + 🍞 breadcrumbs | 可配置 / Configurable |
-| web-testing | 浏览器自动化测试 / Browser automation test | 可配置 / Configurable |
-| changelog | 变更日志 + 生长检测 + 分享 / Changelog + growth + share | 可配置 / Configurable |
-
-## 信任分级文件 / Trust Tier Files
-
-| 文件 / File | 说明 / Description |
+| 如果你 | 你需要这个因为 |
 |:--|:--|
-| `self-check/references/observations.md` | Tier 0 观察池 / Observation Pool |
-| `self-check/references/retired.md` | 退役规则归档 / Retired Rules Archive |
-| `self-check/references/growth-log.md` | 生长事件日志 / Growth Event Log |
-| `changelog/references/growth-rules.md` | 生长检测规则定义 / Growth Detection Rules |
+| 🐣 **用 AI 写代码但不懂编程** | 这是你的"编程纪律外骨骼"，AI 不再瞎改 |
+| 💻 **独立开发者 / 一人公司** | 你是你自己的 QA，这 6 个 Skill 就是你的 QA 团队 |
+| 🏢 **小型团队用 AI 辅助开发** | 统一代码质量标准，减少 Code Review 成本 |
+| 🤖 **重度 AI Agent 用户** | 你的 Agent 越用越聪明——规则自生长，不遗忘 |
 
-## 依赖 / Dependencies
+---
 
-| 依赖 / Dep | 必需？ / Required? | 安装 / Install |
-|:--|:--:|:--|
-| playwright | 可选 / Optional | `npm install playwright && npx playwright install chromium` |
-| tesseract.js | 可选 / Optional | `npm install tesseract.js` |
+## 📖 作者的故事 / Author's Story
 
-## 版本 / Versions
+**一行代码不懂。**
 
-- **V2.5.0（当前 / Current）** — 🍞 面包屑自动播种：改前扫描+改后播种
-- **V2.4.1** — 四环链式闭环
-- **V2.4.0** — 三位一体闭环 + 文档规范体系
-- **V2.3.0** — 设计意图锚点 + 注释-文档联动
-- **V2.2.0** — 中英双语 + 版本同步 + 重命名
-- **V2.1.0（自生长版 / Self-Growing）** — 信任分级 + 分享导出
-- **V2.0.0（通用版 / Universal）** — 去耦重构 / Decoupled refactor
-- **V1（TBP原型 / TBP Prototype）** — 姊妹目录 `AI编程自动流水线-TBP原型/`
+45 天，纯靠 AI 编程工具，从零搭建出一个横跨 Web + 桌面 + 小程序的 14 万行三端平台（[躺不平联盟](https://tangbuping.com)）。
 
-## 许可 / License
+过程中最大的痛苦不是 AI 写不出来——而是**它忘了自己写过什么**。昨天修好的 Bug 今天又犯，改了 A 模块炸了 B 模块。
 
-Apache 2.0
+于是把 3 个月的踩坑经验沉淀成这 6 个 Skill，开源出来。
 
-## 作者 / Author
+**躺不平不是卷，是让其他人也躺不平。**
 
-躺不平联盟
+---
+
+## 🔗 链接 / Links
+
+- 🏠 [躺不平联盟](https://tangbuping.com)
+- 🐙 [GitHub Profile](https://github.com/Ron-dali)
+
+## 📄 许可 / License
+
+Apache 2.0 — 自由使用、修改、分发。
