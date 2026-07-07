@@ -1,10 +1,10 @@
-# Post-Code-Change Self-Check V2.5 / 代码修改后自检 V2.5
+# Post-Code-Change Self-Check V2.6 / 代码修改后自检 V2.6
 
 ## Overview / 概述
 
-每次代码修改后的强制自检流程。逐项遍历 28 条规则，防止重复已知 Bug 模式。V2.5 新增面包屑自动播种——每次文件修改自动植入 AI 导航面包屑。
+每次代码修改后的强制自检流程。逐项遍历 28 条规则，防止重复已知 Bug 模式。V2.5 新增面包屑自动播种，V2.6 新增完整性阻断点（防纸面自检伪完成）。
 
-Mandatory self-check process after every code change. Iterates through 28 rules item by item to prevent repeating known bug patterns. V2.5 adds breadcrumb auto-seeding — every file change automatically plants AI-navigable breadcrumbs.
+Mandatory self-check process after every code change. Iterates through 28 rules item by item to prevent repeating known bug patterns. V2.5 adds breadcrumb auto-seeding, V2.6 adds integrity gate (prevents paper-only false completion).
 
 ## Trigger Conditions (read from pipeline.json)
 
@@ -196,14 +196,29 @@ Think: Could this change reproduce a known incident pattern? Reference `referenc
    - If total > `antiBloat.maxTotalRules` (default 30): warn user
    - If `[HARD]` > `antiBloat.maxHardRules` (default 15): same warning
 
-### Step 7: Automated Testing (optional)
+### Step 6.6: Self-Check Integrity Gate / 自检完整性阻断点 (V2.6 NEW)
+
+> Steps 0-6.5 are all analytical operations (reading files, doing diffs, checking rules). These operations themselves create an illusion of "I've checked everything." Step 7 (Automated Testing) is an execution-type operation, fundamentally different in mode. Place a hard gate at the fracture point between analysis and execution.
+
+> 步骤 0-6.5 全是分析型操作（读文件、做 diff、检查规则），这些操作本身会给人"已经查完了"的错觉。步骤 7 是执行型操作，模式完全不同。在分析模式和执行模式之间的断裂点设置硬性门禁。
+
+After Step 6.5 completes, before Step 7, verify item-by-item / 逐项确认：
+- □ Have Steps 0-6.5 all been completed? (No step may be skipped)
+- □ Has Step 7 (Automated Testing) been queued for execution?
+- □ If Step 7 has NOT been executed → **BLOCK here, prohibit proceeding to Step 8 (Changelog) or git commit**
+
+**Block consequence / 阻断后果**: Skipping Step 7 to write changelog directly = paper-only false completion. Paper checks passed + not actually run tests = illusion of "everything is fine." Self-check = paper checks + actual verification, one step short = not done.
+
+**Why this gate is necessary / 为什么需要这个门禁**: Without it, the AI's natural tendency to stop after analytical steps (all reads/diffs/logic checks feel like "completion") will cause the pipeline to silently truncate at Step 6.5. This gate forces the mode switch from analysis to execution.
+
+### Step 7: Automated Testing / 自动化测试 (mandatory when gate passes)
 
 {{#if pipeline.skills.webTesting.enabled}}
-After self-check passes, execute automated tests:
+After self-check integrity gate passes, execute automated tests:
 - Check if project `{{pipeline.paths.tests}}` has test scripts
 - Run tests and confirm all pass
 {{else}}
-Skip (webTesting not enabled in pipeline.json)
+**WARNING**: webTesting not enabled in pipeline.json — this does NOT exempt from Step 6.6 gate. If no automated test suite exists, perform manual verification before proceeding to Step 8.
 {{/if}}
 
 ### Step 8: Changelog (mandatory)
@@ -230,8 +245,9 @@ self-check (post-code check) ← This Skill
     ├── Step 5: iterate 28 rules
     ├── Step 6: incident pattern match
     ├── Step 6.5: trust-tier check
+    ├── Step 6.6: 🛑 integrity gate (V2.6 — blocks if testing not queued)
     ↓
-web-testing (automated testing, optional)
+web-testing (automated testing, mandatory when gate passes)
     ↓
 changelog (change log)
     ↓

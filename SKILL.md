@@ -1,7 +1,7 @@
 ---
 name: Vibe Coding Rules
 id: vibe-coding-rules
-version: 2.5.2
+version: 2.6.0
 primary: true
 description: >
   6个自我进化的AI编程纪律Skill。改代码前强制自查→安全执行→改后28条规则扫描→自动化测试→变更日志，一条龙闭环。
@@ -26,7 +26,7 @@ website: https://tangbuping.com
 license: Apache-2.0
 ---
 
-# Vibe Coding Rules V2.5
+# Vibe Coding Rules V2.6
 
 > **AI 写代码最大的敌人，是它自己——它会忘记昨天修好的 Bug，会在同一个坑里反复跌倒。**
 >
@@ -68,8 +68,8 @@ git clone https://github.com/Ron-dali/vibe-coding-rules.git
 coding-principles (5 Principles + 🍞 Breadcrumb Pre-scan / 改前五大原则 + 面包屑预扫描)
   → safe-terminal-executor (Safe Terminal Exec / 安全终端执行)
     → Write/Modify Code / 编写修改代码
-      → self-check (28 Rules + Breadcrumb Seeding / 28条规则自检 + 面包屑播种)
-        → web-testing (Auto Regression Test / 自动化回归测试)
+      → self-check (28 Rules + Integrity Gate 🛑 + Breadcrumb Seeding / 28条规则自检 + 完整性阻断点 + 面包屑播种)
+        → web-testing (Auto Regression Test / 自动化回归测试，阻断点通过后强制)
           → changelog (Changelog + Growth Detection / 变更日志 + 生长检测)
             → ✅ Closed Loop / 闭环交付
 ```
@@ -80,7 +80,7 @@ coding-principles (5 Principles + 🍞 Breadcrumb Pre-scan / 改前五大原则 
 |-------|------|
 | 🥇 `coding-principles` | Pre-code 5-principle self-check + 3 trap auto-intercept / 改代码前强制自检五大原则 + 3个常见陷阱自动拦截 |
 | 🛡️ `safe-terminal-executor` | Safe terminal wrapper, timeout protection + forced exit / 终端命令安全封装，超时保护+强制退出 |
-| 🔍 `self-check` | Post-code 28-rule scan + trust-tiered growth + 🍞 breadcrumb auto-seeding / 改后28条规则逐项检查+信任分级+🍞面包屑播种 |
+| 🔍 `self-check` | Post-code 28-rule scan + 🛑 integrity gate (V2.6) + trust-tiered growth + 🍞 breadcrumb auto-seeding / 改后28条规则逐项检查+完整性阻断点+信任分级+🍞面包屑播种 |
 | 🧪 `web-testing` | DOM assertion + screenshot + OCR automated regression test / DOM断言+截图+OCR自动化回归测试 |
 | 📝 `changelog` | Auto changelog generation + rule growth detection / 变更日志自动生成+规则生长检测 |
 | 🚀 `pipeline-init` | One-click project pipeline bootstrap / 新项目一键初始化流水线 |
@@ -88,7 +88,7 @@ coding-principles (5 Principles + 🍞 Breadcrumb Pre-scan / 改前五大原则 
 ## Core Features / 核心特性
 
 - 🔄 **Self-Growing Rules / 规则自生长** — Today's pitfall becomes tomorrow's hard rule the AI can't break / 今天踩的坑，明天变成AI不能再犯的硬规则
-- 🍞 **Breadcrumb System V2.5 / 面包屑系统** — Auto-plant coupled files + historical gotchas in file headers, AI never forgets / 文件头部自动播种耦合关系+历史坑位，AI不再失忆
+- 🍞 **Breadcrumb System V2.6 / 面包屑系统** — Auto-plant coupled files + historical gotchas in file headers, AI never forgets / 文件头部自动播种耦合关系+历史坑位，AI不再失忆
 - 🎯 **Trust-Tiered Growth / 信任分级** — Tier0 Observation Pool → Tier1 [SOFT] → Tier2 [HARD], auto promote/demote / 观察池→软规则→硬规则，自动晋升退役
 - 🌍 **Cross-Platform / 跨界兼容** — Works with CodeBuddy, Cursor, Windsurf / 三种AI Agent通用
 
