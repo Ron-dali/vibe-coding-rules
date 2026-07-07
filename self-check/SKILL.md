@@ -1,3 +1,11 @@
+---
+name: self-check
+description: Mandatory post-code-change self-check checklist. Includes 28 universal programming discipline rules, code-type index matrix, configurable registration/truncation/dual-entry checks, V2.5 four-hop chain loop + breadcrumb auto-seeding, V2.6 integrity gate (prevents paper-only false completion). Triggers after every code change. Supports pipeline.json project configuration.
+tags: [self-check, code-review, checklist, quality, pipeline, breadcrumb, integrity-gate]
+version: 2.6.0
+
+---
+
 # Post-Code-Change Self-Check V2.6 / 代码修改后自检 V2.6
 
 ## Overview / 概述

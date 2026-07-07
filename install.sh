@@ -3,7 +3,7 @@
 echo "========================================"
 echo "  Vibe Coding Rules - 安装程序"
 echo "  Vibe Coding Rules - Installer"
-echo "  Version 2.5.0"
+echo "  Version 2.6.0"
 echo "========================================"
 echo ""
 
@@ -38,6 +38,7 @@ echo ""
 if [ "$AGENT_TYPE" = "codebuddy" ]; then
     echo "[INSTALL] Copying skills to CodeBuddy dir... | 复制到 CodeBuddy 目录..."
     
+    cp -r pipeline-init "$SKILL_DIR/" && echo "  pipeline-init          [OK]"
     cp -r coding-principles "$SKILL_DIR/" && echo "  coding-principles       [OK]"
     cp -r safe-terminal-executor "$SKILL_DIR/" && echo "  safe-terminal-executor [OK]"
     cp -r self-check "$SKILL_DIR/" && echo "  self-check             [OK]"

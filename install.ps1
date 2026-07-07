@@ -4,7 +4,7 @@ param(
 
 Write-Host "========================================" -ForegroundColor Cyan
 Write-Host "  Vibe Coding Rules - 安装程序" -ForegroundColor Cyan
-Write-Host "  Version 2.5.0 (PowerShell Enhanced)" -ForegroundColor Cyan
+Write-Host "  Version 2.6.0 (PowerShell Enhanced)" -ForegroundColor Cyan
 Write-Host "========================================" -ForegroundColor Cyan
 Write-Host ""
 
@@ -104,6 +104,7 @@ function Copy-Skill {
 if ($agentType -eq "codebuddy") {
     Write-Host "[安装] 复制 Skill 到 CodeBuddy 目录（含模板替换）..." -ForegroundColor Cyan
     
+    Copy-Skill "pipeline-init" "$skillDir\pipeline-init" "pipeline-init" $false
     Copy-Skill "coding-principles" "$skillDir\coding-principles" "coding-principles" $false
     Copy-Skill "safe-terminal-executor" "$skillDir\safe-terminal-executor" "safe-terminal-executor"
     Copy-Skill "self-check" "$skillDir\self-check" "self-check"

@@ -1,7 +1,12 @@
-# pipeline-init — Project Initialization Wizard / 项目初始化向导
+---
+name: pipeline-init
+version: 2.6.0
+---
 
-> 对话式信息采集 → 依赖检测 → 脚手架创建 → 流水线模板复刻 → 一步到位。
+# pipeline-init — Project Initialization Wizard V2.6
+
 > Conversational project info collection → dependency detection → scaffold creation → pipeline template fork → ready in one go.
+> V2.6 adds Step -1: Platform Detection → Memory Self-Heal → Project State Detection with three-path handling.
 
 ## Trigger Conditions
 
@@ -9,8 +14,100 @@ Activate when any of the following occurs:
 - User says "I want to build X project", "Help me init the pipeline", "New project"
 - Memory trigger hits new-project intent
 - User mentions starting a new project
+- **V2.6**: Skill first loaded in ANY project (runs Step -1 for memory self-heal)
 
-## Workflow / 工作流程
+## Workflow
+
+### Step -1: Pre-Initialization Detection（V2.6 NEW — Run first on every skill load）
+
+This step runs BEFORE any other workflow. It is **idempotent** — safe to run repeatedly.
+
+#### Step -1.0: Platform Detection（确定 Memory 文件路径）
+
+Detect which AI coding tool the user is using, and map to its memory/rules file:
+
+| Detection Condition | Tool | Memory File |
+|:--|:--|:--|
+| `~/.codebuddy/skills/` directory exists | CodeBuddy | `.codebuddy/memory/MEMORY.md` |
+| `.cursor/rules/` directory exists | Cursor | `.cursor/rules/vibe-coding-rules.mdc` |
+| `.windsurfrules` file exists | Windsurf | `.windsurfrules` |
+| `CLAUDE.md` file exists | Claude Code | `CLAUDE.md` |
+| `.github/copilot-instructions.md` exists | GitHub Copilot | `.github/copilot-instructions.md` |
+| None of the above | Generic fallback | `.ai-pipeline/MEMORY.md` |
+
+Store detected `memoryPath` for use in Step -1.a and Step 6.
+
+#### Step -1.a: Memory Integrity Check & Self-Heal（每次加载必执行，幂等）
+
+1. Read the file at `memoryPath` (from Step -1.0)
+2. Check for 5 critical sections (using fuzzy markdown heading match):
+   - `"Skill依赖链"` or `"Skill 编排"` or `"Skill Orchestration"`
+   - `"强制自检硬规则"` or `"步骤6（测试）不可跳过"` or `"Step 6 mandatory"`
+   - `"开发文档标准路径"` or `"Dev doc standard paths"`
+   - `"面包屑规则"` or `"breadcrumb"`
+   - `"项目初始化状态"` or `"已初始化"` or `"initialization status"`
+3. If ANY section is missing → **auto-repair immediately** — do NOT ask user
+4. Auto-repair: read template from `references/memory-template.md` and append missing sections to `memoryPath`
+5. Record in log: `self-healed: [list of repaired sections]`
+6. If file does not exist → create it with full template
+
+**File format adaptation**:
+- `.mdc` files (Cursor): add YAML frontmatter (`---\ndescription: Vibe Coding Rules\nalwaysApply: true\n---`) before markdown
+- `.md` / `.windsurfrules` / `CLAUDE.md`: plain markdown
+
+**This step runs on EVERY skill activation** — not just first time. It ensures the pipeline's critical rules are always present in memory, preventing AI from skipping mandatory steps.
+
+#### Step -1.b: Project State Detection
+
+After memory self-heal, detect project state:
+
+1. Check if project root has code files (`.js`, `.html`, `.py`, `.ts`, etc.)
+   → NO → **Path A: New Project**
+2. Check if `开发文档/` directory exists (or configured `devDocs` path)
+   → NO → **Path C: Existing Project Without Docs**
+3. Check if `开发文档/00-必读/开发文档管理.md` exists
+   → YES → **Path B: Existing Project With Docs**
+   → NO → **Path C: Existing Project Without Docs**
+
+#### Path A: New Project
+
+Proceed with standard pipeline-init workflow (Step 0 through Step 7 below).
+
+#### Path B: Existing Project With Docs — Compliance Scan
+
+1. Run DOC_SPEC compliance scan:
+   - Check all docs in `开发文档/` have `📋 管理规范见` reference in header
+   - Check no orphan files in wrong directories
+   - Check file size limits (≤500 lines)
+   - Verify `📖` references point to existing docs
+   - Verify management doc index is up to date
+2. Output a report: `[N] missing 📋 references | [N] files over limit | [N] broken 📖 links`
+3. Ask user: "Found some documentation issues. Fix them now or later?"
+4. If user says "fix now" → repair issues (add 📋, split large files, fix broken links)
+
+#### Path C: Existing Project Without Docs — Bootstrap
+
+1. Create standard dev doc directory structure:
+   ```
+   开发文档/
+   ├── 00-必读/
+   │   └── 开发文档管理.md     (create from template)
+   ├── 01-变更日志/
+   ├── 02-项目参考/
+   ├── 03-架构设计/
+   ├── 04-方案设计/
+   └── 待办事项/
+   ```
+2. Create `开发文档管理.md` with proper structure (decision tree + index)
+3. Scan existing code and auto-populate:
+   - Scan for Express routes → write to `00-必读/接口契约.md` skeleton
+   - Scan for tool/module definitions → write code file index
+   - Mark gaps as `<!-- TODO: 待补充 -->`
+4. Run first mandatory baseline self-check:
+   - Execute full self-check cycle on existing code
+   - Write findings to `01-变更日志/变更日志-YYYY-MM-DD.md`
+   - Mark any issues as "baseline finding — not a regression"
+5. Report to user: "I've created the dev docs structure and ran an initial self-check. Here's what I found..."
 
 ### Step 0: Language Selection
 
@@ -19,92 +116,29 @@ Follow `references/init-dialog.md` Phase 0 to ask the user's preferred language.
 ### Step 1: Conversational Collection
 
 Follow `references/init-dialog.md` template to progressively collect:
-
-1. **Project name**: Ask for the project name
-2. **Tech stack**: Present common options with descriptive names (no jargon required)
-3. **Project type**: Web app / Backend API / Desktop app / Mini-program / Full-stack
-4. **Auto-testing needed?**: Default yes
+1. **Project name**, 2. **Tech stack**, 3. **Project type**, 4. **Auto-testing needed?** (default yes)
 
 ### Step 2: Dependency Detection
 
-Follow `references/tech-stack-checklist.md` to check environment:
-- Node.js version (`node -v`)
-- npm version (`npm -v`)
-- Git installed? (`git --version`)
-- Additional deps based on tech stack
+Check environment: Node.js version, npm, Git, additional deps per tech stack.
+On failure: provide plain-language guides. Mark missing items for later.
 
-On failure: provide plain-language install guides. Do NOT force full install — mark missing items for user to install later.
+### Step 3-5: Create Structure + Fork Template + Populate pipeline.json
 
-### Step 3: Create Project Structure
-
-Based on tech stack and project type, create minimal project structure:
-```
-project-name/
-├── .ai-pipeline/           # Pipeline directory
-│   ├── pipeline.json       # Populated project config
-│   ├── VERSION             # Single source of truth for version (init: 0.1.0)
-│   └── self-check/
-│       └── references/
-│           ├── self-check-full.md
-│           ├── incident-history.md
-│           ├── observations.md
-│           ├── retired.md
-│           └── growth-log.md
-├── README.md               # Project readme (no hardcoded version, reference .ai-pipeline/VERSION)
-└── Other base files (per tech stack)
-```
-
-**README.md content requirements**:
-- Written in user's chosen language
-- No hardcoded version numbers (e.g. `v1.0.0`); write "current version: see `.ai-pipeline/VERSION`"
-- Must include: project intro, tech stack, quick start, pipeline usage guide
-
-### Step 4: Fork Pipeline Template
-
-From the globally installed template (`开发文档/开发者自创工具/AI编程流水线SKILL通用版/`), copy to `project/.ai-pipeline/`:
-
-- `self-check/SKILL.md`
-- `self-check/references/self-check-full.md`
-- `self-check/references/incident-history.md`
-- `changelog/SKILL.md`
-- `changelog/references/growth-rules.md`
-- `pipeline.json` (template, then replace with populated version)
-- `VERSION` file (write `2.5.0` and current date)
-
-**Critical**: Only copy universal template Skill files. `coding-principles` / `safe-terminal-executor` / `web-testing` do NOT use project-local copies (they always load from global install).
-
-### Step 5: Populate pipeline.json
-
-Write Step 1 collected info into `project/.ai-pipeline/pipeline.json`:
-- `project.name` → project name
-- `project.type` → mapped project type
-- `project.port` → default port per tech stack
-- `paths.*` → adjusted per project structure (changelog, tests, publicDir, etc. mapped individually)
-- `init.completed` → `true`
-- `init.createdAt` → current ISO timestamp
+Create `.ai-pipeline/` with `pipeline.json`, `VERSION` (2.6.0), and self-check references.
+Fork `self-check` and `changelog` Skill templates. Populate project config.
+Write `README.md` with proper language and no hardcoded versions.
 
 ### Step 6: Write Project Memory
 
-Using the language chosen in Step 0, append to project's `.codebuddy/memory/MEMORY.md`:
-```markdown
-## Vibe Coding Rules (V2.5 auto-initialized on YYYY-MM-DD)
-
-Pipeline files are in `.ai-pipeline/`. Rules grow automatically from development practice.
-
-Development loop:
-1. 5 coding principles (pre-code check)
-2. Safe terminal execution
-3. Write code
-4. self-check (rule check + trust-tiered growth)
-5. web-testing (automated testing)
-6. changelog (change log + growth detection + share export)
-```
-
-(Do NOT wrap in markdown code blocks — this is actual memory content being written.)
+Using the Step -1.0 detected platform, append V2.6 pipeline enforcement rules to the memory file, including:
+- Skill dependency chain (mandatory order)
+- Force self-check hard rules (Step 6 mandatory, Step 5.5 integrity gate)
+- Dev doc standard paths
+- Breadcrumb rules
+- Initialization status marker
 
 ### Step 7: Confirm Completion
 
-Report to user:
-- List of created project structure
-- Populated config items
-- Pipeline ready — enjoy self-growing code quality assurance
+Report created structure, config items, and pipeline readiness.
+If memory was self-healed in Step -1.a, mention which sections were repaired.

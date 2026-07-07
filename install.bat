@@ -5,7 +5,7 @@ setlocal enabledelayedexpansion
 echo ========================================
 echo   Vibe Coding Rules - 安装程序
 echo   Vibe Coding Rules - Installer
-echo   Version 2.5.0
+echo   Version 2.6.0
 echo ========================================
 echo.
 

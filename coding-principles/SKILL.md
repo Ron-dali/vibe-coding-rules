@@ -1,64 +1,330 @@
-# Mandatory: AI Coding 5 Principles / AI编程五大原则（每次对话强制激活）
+---
+name: coding-principles
+description: Mandatory activation — 3 Pre-Gates + 6 Principles + 3 Traps layered discipline system. V2.6 adds Three-Question self-check, Repeat-Bug cap, File-Size decision, Intent Anchor pre-judgment. Regardless of task type, self-check all before outputting any code.
+tags: [ai-coding, programming-principles, code-quality, mandatory, breadcrumb, pre-gate, discipline]
+version: 2.6.0
 
-> **强制纪律。每次输出代码前必须自我检查五大原则。**
-> **Mandatory rule. Must self-check principles before every coding instruction.**
+---
 
-## Usage Rules
+# Mandatory: AI Coding Discipline / AI编程纪律（每次对话强制激活）
 
-**Must self-check before acting when any of the following is true:**
+> **Mandatory rule. Every coding session executes three-layer discipline: Pre-Gates → 6 Principles → 3 Traps.**
+> **强制纪律。每次编码会话必须执行三层体系：前置门 → 六大原则 → 三大陷阱。**
 
-- User asks to modify code
-- User reports a bug
-- User requests a new feature
-- Code review / refactoring
+## Usage Rules / 使用规则
 
-**Principle Checklist (run through before outputting code):**
+**Must execute when any of the following is true / 以下任一条件满足时必须执行：**
 
-□ Principle 0 — Breadcrumb Pre-Scan 🍞 (V2.5): Open target file → scan for 🍞 breadcrumb header → parse @COUPLED/📖 for navigation. If no 🍞 header, mark "needs seeding after change".
-□ Principle 1 — Think First: Do I really understand the problem? Are there multiple interpretations? Am I sure I'm editing the right file?
-□ Principle 2 — Keep It Simple: Can this be solved in one line? Am I over-engineering?
-□ Principle 3 — Precise Modification: Only change what must be changed. Did I accidentally touch unrelated code?
-□ Principle 4 — Goal-Driven: Will it run after the change? Any missing deps/styles/references?
-□ Trap A — Falsy Coercion: `value||default` swallows `0/''/false`. Use `!=null` or `??` for numeric checks.
-□ Trap B — Select Fake-Selection: No `selected` attribute → browser shows first option by default. Always add a placeholder `<option>`.
-□ Trap C — POST-as-UPSERT: UPDATE branch must NOT hardcode fields. Always read from `req.body`.
+- User asks to modify code / 用户要求修改代码
+- User reports a bug / 用户报告 Bug
+- User requests a new feature / 用户要求新功能
+- Code review / refactoring / 代码审查或重构
 
-## The Five Principles / 五大原则
+---
 
-| # | Principle | Core Idea | Correct Approach |
-|---|-----------|-----------|------------------|
-| 0 | **Breadcrumb Pre-Scan 🍞** (V2.5) | Use breadcrumbs as project map | Open file → scan 🍞 header → parse @COUPLED/📖 → navigate with context |
-| 1 | **Think First** | No assumptions, no skipping | Read files to confirm current state before acting |
-| 2 | **Keep It Simple** | Minimal changes | Prioritize solving with fewest lines possible |
-| 3 | **Precise Modification** | Only touch target code | Treat where the problem is, don't spread |
-| 4 | **Goal-Driven** | It must run after changes | Ensure every change is a closed loop (JS+CSS+template) |
+## Layer 1: Pre-Gates / 第一层：前置门（Pre-Code — Must Pass Before Writing Any Code / 动手前必须通过，不通不许写代码）
 
-## Principle 0: Breadcrumb Pre-Scan 🍞 (V2.5 NEW)
+### Gate 1: Three Questions / 门1：三问三答（Patch Self-Check / 补丁自检）
+
+**Before proposing any change, answer these three questions (all three required): / 提出修改方案前必须回答三个问题（缺一不可）：**
+
+```
+Q1: Have I traced the full call chain? / 我追踪了完整调用链吗？
+  → List every node: user entry → API endpoint → data layer → rendering
+  → 列出每个节点：用户入口 → 服务端端点 → AI调用 → 前端渲染
+  → Write down actual file+function names for each node, don't just say "I checked"
+  → 写清文件+函数名，不只是口头说"我看过了"
+
+Q2: Have I confirmed all branch paths? / 我确认了所有分支路径吗？
+  → List all paths: different views / environments / user types / platforms
+  → 列出所有路径
+  → Mark each: "✅ confirmed unaffected" or "🔧 needs sync change"
+  → 每一行标注"✅确认不受影响"或"🔧需要同步修改"
+
+Q3: Is my fix an architecture-level unified fix, or a single-path patch? / 修复是架构层面统一修复还是单路径补丁？
+  → If only one path was changed → first answer "why can't we unify" before proceeding
+  → 如果只改了一个路径 → 先回答"为什么不能统一修复"再动手
+  → If the answer is weak → stop and rethink, don't continue
+  → 如果答案牵强 → 停下来重新思考，不要继续
+```
+
+**Violate any question → the change is invalid, must roll back and restart. / 违反任一条 → 修改视为无效，必须回退重来。**
+
+**Self-check pass indicator**: explicitly output the three answers (short is fine, but must be verifiable). / **自查通过标志**：在回复中显式输出三问三答（不用太长，但必须可验证）。
+
+### Gate 2: Repeat Bug Cap / 门2：重复Bug上限
+
+```
+Rule: If the same bug has been fixed 2 times and still broken,
+      the 3rd action MUST be web search, NOT a 3rd code fix.
+规则：同一个Bug改了2次还修不好时，第3次行动必须是上网搜索，不是改第3版代码。
+
+Search strategy / 搜索策略:
+1. "[Framework] + [symptom keywords]" (e.g. "React useEffect infinite loop")
+2. GitHub Issues (framework official repo)
+3. StackOverflow / community forums
+4. Try 3 different keyword combinations / 关键词试3组不同组合
+
+Consequences of ignoring / 违反后果:
+- 3 fixes = wasted time / 浪费时间
+- 4 fixes = introduces new bugs / 引入新Bug
+- 5 fixes = project quality collapses / 项目质量崩塌
+```
+
+### Gate 3: File Size Decision / 门3：空间决策（300-line Redline + New Feature = New File / 300行红线 + 新功能开新文件）
+
+```
+Before touching any file, check / 动手前判断:
+1. Target file current line count > 300? / 目标文件当前超过300行？
+   → YES: split first, then modify (never append to large files)
+   → 是：先拆分再修改，不往大文件追加
+2. Is this a new feature or modifying existing? / 这是新增功能还是修改现有？
+   → New feature: MUST create new file/module / 新增功能：必须新建文件/模块
+   → Modify existing: consider splitting first if file is large / 修改现有：优先考虑先拆分再修改
+
+Exemptions / 豁免:
+  - Pure config/declaration/boilerplate: relax to 500 lines / 纯配置/声明/框架代码：可放宽至500行
+  - Highly cohesive algorithms (state machines, compiler cores): relax to 400 lines / 高度内聚算法：可至400行
+  - Auto-generated code: don't count / 框架自动生成代码：不计入
+```
+
+---
+
+## Layer 2: Six Principles / 第二层：六大原则（While Coding — Follow Each One / 写码时逐条遵守）
+
+### Principle 0: Breadcrumb Pre-Scan 🍞 / 原则0：面包屑预扫描
 
 > Breadcrumbs are the AI's project map. Before modifying any file, scan its 🍞 header to understand what else depends on it.
+> 面包屑是AI的"项目地图"。改文件前先扫描🍞头部，了解改了这里会影响谁。
 
-**When opening any file for modification:**
+**When opening any file for modification / 打开文件准备修改时:**
 
-1. **Scan for 🍞 breadcrumb block**: search for `🍞 AI Breadcrumb` in file header
-2. **If found** → parse the breadcrumbs:
-   - `@COUPLED` entries → these files must be checked/updated together
-   - `📖` entries → these docs contain related design details → read them
-   - `@GOTCHA` entries → known traps in this code → avoid them
-   - `@BUGFIX` entries → historical bugs fixed here → don't regress
-3. **If NOT found** → mark this file for breadcrumb seeding (self-check Step 0.6 will handle it after changes)
-4. **Use parsed breadcrumbs to expand change scope**: add @COUPLED files to your "must check" list before making changes
+1. **Scan for 🍞 breadcrumb block**: search for `🍞 AI Breadcrumb` in file header / 搜索文件头部🍞导航块
+2. **If found** → parse the breadcrumbs / 解析面包屑:
+   - `@COUPLED` entries → these files must be checked/updated together / 联动文件，必须同步检查
+   - `📖` entries → these docs contain related design details → read them / 关联设计文档，需要读
+   - `@GOTCHA` entries → known traps in this code → avoid them / 已知陷阱，避开
+   - `@BUGFIX` entries → historical bugs fixed here → don't regress / 历史修复记录，别回退
+3. **If NOT found** → mark this file for breadcrumb seeding (self-check Step 0.6 will handle it after changes) / 标记此文件缺面包屑，改后必须补设
+4. **Use parsed breadcrumbs to expand change scope**: add @COUPLED files to your "must check" list before making changes / 把联动文件加入检查清单
 
-**Why this matters**: Without breadcrumbs, each AI session starts from zero context. With breadcrumbs, opening a file instantly reveals what else depends on it — the AI navigates the project like following a map instead of groping in the dark.
+**Breadcrumb standard format / 🍞 面包屑标准格式** (design principle: AI understands at a glance, no external docs needed / AI一眼就能理解，不需要读任何外部文档):
 
-## Common Traps / 常见陷阱
+```
+/*
+ * ─── 🍞 AI Breadcrumb Navigation ──────────────────
+ * Tag meanings: @COUPLED=linked files @GOTCHA=gotcha @BUGFIX=bug fix @MAGIC=magic number
+ *              @DEPENDS=external dependency @ASSUME=assumption @TODO=todo @WHY=design rationale
+ *              @PERF=performance @CONTRACT=interface contract 📖=dev doc reference
+ * 
+ * Breadcrumbs (changing this affects):
+ *   @COUPLED sync needed: fileA.js#L200, fileB.html
+ *   📖 see: docs/architecture/tool-registration.md
+ *   @BUGFIX 2026-07-06: reason, fix: solution
+ * ──────────────────────────────────────────────────
+ */
+```
 
-| # | Trap | Wrong Pattern | Correct Pattern |
-|---|------|--------------|-----------------|
-| A | **JS falsy swallows 0** | `value \|\| 1000` → `0` gets replaced | `value != null ? value : 1000` |
-| B | **Select fake selection** | `<select>` without `selected` attr | Default case: `<option value="" disabled selected>Please select...</option>` |
-| C | **POST upsert hardcode** | UPDATE branch writes literal field values | Read from `req.body`, fallback to `existing.xxx` |
+**Why this format AI-readable without external docs / 为什么这个格式 AI 能理解（无需外部文档）**:
+- `🍞` emoji = visual anchor, AI can grep `/🍞/` to locate instantly / 视觉锚点，一秒定位
+- Tag meanings line = **inline cheat sheet**, no need to read ANCHOR_SPEC.md / 内嵌速查手册
+- `@COUPLED sync needed: file1, file2` = tells AI exactly what to change together / 直接告诉 AI 改哪里
+- `📖 see: doc path` = entry point to detailed design docs / 设计文档入口
+- `@BUGFIX date:reason, fix:solution` = don't regress / 别回退
 
-## Sources
+**Key principles / 关键原则**:
+- Breadcrumbs are **alive** — update with every change, not write-once-forever / 面包屑是活的，每次改动都要更新
+- Breadcrumbs are **specific** — `@COUPLED` must specify file paths, not vague "all frontend files" / 必须写具体路径
+- Breadcrumbs are **self-documenting** — the tag glossary ensures even AI without this Skill loaded can understand / 自解释的
+- Don't aim for massive one-time annotation — **seed as you go** / 改代码即播种
+
+### Principle 1: Think First / 原则1：先思考
+
+```
+Don't code from memory. Read files to confirm current state before acting.
+Understand WHY the code looks like this before deciding HOW to change it.
+Define change scope beforehand — don't expand while coding.
+
+改代码前必须读文件确认现状，不准凭记忆盲改。
+先理解为什么代码长这样，再决定怎么改。
+修改范围必须事前想清楚，不准边改边扩大范围。
+```
+
+**Intent Anchor Pre-Judgment / 意图锚点预判（before writing code, plan what breadcrumb tags you'll need / 写码前预判需要什么标签）:**
+
+When reading the target file, scan existing anchors and pre-plan new ones / 读文件时扫锚点并预判:
+
+```
+□ Multiple design choices? → Prepare @WHY chose-A-not-B: reason / 方案有多个选择？→ @WHY
+□ Hardcoded business numbers/constants? → Prepare @MAGIC value=meaning, sync with [file] / 硬编码了业务数字？→ @MAGIC
+□ Change affects other files? → Prepare @COUPLED sync needed: [file list] / 改动影响其他文件？→ @COUPLED
+□ Depends on external system quirks? → Prepare @DEPENDS [system]'s [behavior], must [action] / 依赖外部系统怪异行为？→ @DEPENDS
+□ Depends on data format assumptions? → Prepare @ASSUME [assumption], if [condition changes] adjust [logic] / 依赖数据格式假设？→ @ASSUME
+□ Temporary workaround? → Prepare @TODO [date] [planned solution] / 临时方案？→ @TODO
+□ Fixing a bug? → Prepare @BUGFIX [date]:[cause], fix:[solution], test:[entry] / 修Bug？→ @BUGFIX
+□ Performance-sensitive but intentionally not optimized? → Prepare @PERF [why not optimize] / 性能敏感但故意不优化？→ @PERF
+□ Design intent too complex for inline comment? → Prepare 📖 [doc path] / 代码写不下设计意图？→ 📖
+
+Don't wait until self-check to add these — by then you've already forgotten the design rationale.
+不要等到自检时才补——那时已经忘了设计理由。
+```
+
+### Principle 2: Subtraction First / 原则2：做减法优先
+
+```
+When fixing bugs, always ask first: can this be solved by DELETING code?
+A bug fixable by removing 3 lines should NEVER add even 1 line of patch.
+Fight the LLM's natural instinct to "add code" — code growth is entropy,
+good fixes should be entropy reduction.
+
+修Bug时优先问：能不能通过删除代码来解决？
+能删3行解决的Bug，绝对不加1行补丁。
+对抗LLM天然的"堆代码"本能——代码量增长是熵增，好的修复应该是熵减。
+
+Anti-pattern / 反例:
+- ❌ Add an if-branch for a special case (piling code) / 加if分支处理特殊情况
+- ✅ Remove the redundant logic that created the special case (subtraction) / 删掉导致特殊情况的冗余逻辑
+
+Self-check: Is the net line count (added - deleted) positive or negative?
+If positive, ask: are these added lines truly impossible to delete?
+自检：本次改动的净行数是正还是负？如果为正，这些新增代码真的不可删除吗？
+```
+
+### Principle 3: Keep It Simple / 原则3：保持简单
+
+```
+Minimize change scope. Never touch unrelated code.
+Don't introduce unnecessary abstraction layers.
+Keep code readable, maintainable, rollbackable.
+
+最小化改动范围，无关代码一律不动。
+不引入不必要的抽象层。
+保持代码可读、可维护、可回滚。
+```
+
+### Principle 4: Precise Modification / 原则4：精准修改
+
+```
+Only change target code. Don't "optimize" unrelated modules on the side.
+Confirm impact scope before modifying, confirm only target files changed after.
+Must go through Pre-Gate 1 (Three Questions) to confirm all branch paths.
+
+只改目标代码，不顺手"优化"无关模块。
+修改前确认影响范围，改后确认只动了目标文件。
+必须走前置门1（三问三答）确认所有分支路径。
+```
+
+### Principle 5: Goal-Driven / 原则5：目标驱动
+
+```
+Code must run after changes. Feature must be a closed loop.
+Leave no half-finished work, no "I'll fix it later" traps.
+Modification complete → verify immediately → confirm closure.
+
+改完代码必须能跑，功能闭环。
+不遗留半成品、不留下"回头再弄"的坑。
+修改完成 → 立即验证 → 确认闭环。
+```
+
+---
+
+## Layer 3: Three Traps / 第三层：三大陷阱（Must Avoid While Coding / 写码时强制避开）
+
+### Trap A: Numeric Values Cannot Use `||` for Null Check / 陷阱A：数值不可用 `||` 判空
+
+```javascript
+// ❌ Wrong / 错误: 0 is treated as falsy / 0被当作falsy
+const count = userInput || defaultValue;
+
+// ✅ Correct / 正确: only check null/undefined / 只判null/undefined
+const count = userInput ?? defaultValue;
+// Or for wider compatibility / 或兼容旧版:
+const count = userInput != null ? userInput : defaultValue;
+```
+
+### Trap B: `<select>` Must Have Placeholder `<option>` / 陷阱B：`<select>` 必须加占位 `<option>`
+
+```html
+<!-- ✅ Correct: default non-submittable placeholder / 有默认不可提交的占位项 -->
+<select>
+  <option value="" disabled selected>Please select... / 请选择...</option>
+  <option value="a">Option A</option>
+</select>
+```
+
+### Trap C: POST upsert UPDATE Branch Must Not Hardcode Fields / 陷阱C：POST upsert 更新分支不可硬编码字段
+
+```
+POST upsert interface's update logic MUST dynamically read field names,
+never hardcode specific fields.
+Schema changes over time — hardcoded fields cause new fields to be lost.
+
+POST upsert 接口的更新逻辑必须动态获取字段名，不可硬编码具体字段。
+因为schema会变，硬编码字段会导致新字段丢失。
+```
+
+---
+
+## Summary Checklist / 总结检查清单（Run Through Before Outputting Code / 输出代码前逐项检查）
+
+```
+□ Gate 1 — Three Questions / 三问三答: Full call chain? All branches? Unified fix or patch?
+□ Gate 2 — Repeat Bug / 重复Bug: Fixed 2+ times already? → Search first, don't code
+□ Gate 3 — File Size / 文件大小: Target file >300 lines? New feature needs new file?
+□ Principle 0 — 🍞 Breadcrumb Pre-Scan / 面包屑预扫描: Open file → scan header → parse @COUPLED/📖
+□ Principle 1 — Think First + Intent Anchor Pre-Judgment / 先思考+意图锚点预判: What tags will I need?
+□ Principle 2 — Subtraction First / 做减法: Can I delete code instead of adding?
+□ Principle 3 — Keep It Simple / 保持简单: Minimal changes, no over-engineering
+□ Principle 4 — Precise Modification / 精准修改: Only target code, confirm all branch paths
+□ Principle 5 — Goal-Driven / 目标驱动: Will it run? Verify immediately → close loop
+□ Trap A — Falsy Coercion / 假值强制: Using `||` on numeric values?
+□ Trap B — Select Fake-Selection / Select假选中: `<select>` has placeholder option?
+□ Trap C — POST-as-UPSERT: UPDATE branch reads from `req.body`?
+```
+
+---
+
+## Appendix: Classic Patch Anti-Patterns Quick Reference / 附录：经典补丁反模式速查
+
+The following are typical patch anti-patterns extracted from real projects. Alert immediately when encountering similar patterns.
+以下是从真实项目中提取的典型补丁反例，遇到类似模式立刻警觉。
+
+| # | Pattern / 模式 | Lesson / 教训 |
+|:--|:--|:--|
+| 1 | Same bug fixed 3+ times, all failed / 同一个Bug改3次以上全失败 | Fix 2 times → search online (it's likely a known OS/framework-level issue) / 修2次不好就上网搜 |
+| 2 | Fix crosses session boundaries, new session forgets context / 修复跨会话边界，新会话忘记上下文 | Trace the COMPLETE call chain, not just the current data stream / 追踪完整调用链 |
+| 3 | Adding a "safety check" function at wrong call site → global breakage / 在错误位置加"安全检查"→全局崩溃 | Never call safety functions when the guarded object doesn't exist / 零对象时禁止调用防护函数 |
+| 4 | Changed one entry point's HTML, forgot another / 改了入口A忘改入口B | Multi-entry projects: script/style tags must sync across all entry files / 多入口必须同步 |
+| 5 | After splitting files, functions break because of missing bridge connections / 拆文件后函数崩溃 | After splitting, verify all cross-module bridges (imports, exports, call chains) / 拆分后验证跨模块桥接 |
+
+---
+
+## Related Skill Orchestration / 关联Skill编排
+
+This Skill is the **first link** in the Vibe Coding Rules pipeline / 本Skill是流水线的**第一环节**:
+
+```
+coding-principles ← This Skill (pre-code mandatory) / 本Skill（改前强制）
+    ├── Layer 1: Pre-Gates (Three Questions + Repeat Bug + File Size)
+    ├── Layer 2: Six Principles (🍞 Pre-Scan → Think First → Subtraction → Simple → Precise → Goal-Driven)
+    ├── Layer 3: Three Traps (|| falsy / select fake / POST hardcode)
+    ↓
+safe-terminal-executor (if API verification needed) / 如需API验证
+    ↓
+Write/Modify Code / 写/改代码
+    ↓
+self-check (28 rules + trust tiers + four-hop chain + 🛑 integrity gate V2.6 + 🍞 auto-seeding) / 自检
+    ↓
+web-testing (browser automation: DOM + screenshot + OCR, mandatory when gate passes) / 自动化测试
+    ↓
+changelog (change log + growth detection + anti-bloat) / 变更日志
+    ↓
+git commit / 自动存档
+    ↓
+✅ Delivery Closed Loop / 交付闭环
+```
+
+## Sources / 参考来源
 
 Inspired by observations from the AI coding community on how AI-assisted programming changes development workflows.
 
