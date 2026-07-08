@@ -1,3 +1,11 @@
+---
+name: web-testing
+description: Automated web application testing. Uses Playwright (browser interaction + DOM assertion) + tesseract.js (OCR screenshot text verification). Supports pipeline.json configuration for project URL, port, and DOM selectors.
+tags: [testing, web, playwright, ocr, automation, pipeline]
+version: 2.6.0
+
+---
+
 # Web Automated Testing / Web自动化测试
 
 ## Overview / 概述
@@ -41,6 +49,22 @@ Automated browser testing Skill. Uses Playwright for browser interaction and DOM
 - Multi-language support
 
 ## Workflow
+
+### Step 0: Project Type Detection / 项目类型检测（V2.6）
+
+Before running any test, check whether this project actually needs browser testing / 先判断项目是否需要浏览器测试：
+
+1. **Check `pipeline.json` → `project.type`**:
+   - `web` / `fullstack` / `spa` / `mini-program` → Continue to Step 1
+   - `cli` / `backend-api` / `desktop` / `script` → **Skip this Skill**: report `"Web testing skipped — project type is {type}, no browser UI to test"`
+2. **No `pipeline.json`** → check `package.json` for web frameworks:
+   - Contains `react`/`vue`/`angular`/`next`/`nuxt`/`express` with a `start` or `dev` script → likely web → continue
+   - Otherwise → skip with note: `"No web project detected — web-testing skipped"`
+3. **Both files missing** → check for `.html` files in project root:
+   - Found → possible static web → continue with caution
+   - Not found → skip
+
+> **Why**: Running Playwright on a CLI-only project wastes time and produces confusing errors. / 在纯CLI项目上跑Playwright浪费时间且报错混乱。
 
 ### Step 1: Prepare
 Check test dependencies installed:

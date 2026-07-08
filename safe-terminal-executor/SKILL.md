@@ -1,3 +1,11 @@
+---
+name: safe-terminal-executor
+description: Safe terminal executor. Triggers when executing HTTP API tests, backend endpoint verification, curl/wget requests. Forces all network commands to be wrapped as Node.js scripts with timeout protection, guaranteed process exit, and log output.
+tags: [terminal, http, api-testing, safety, timeout]
+version: 2.6.0
+
+---
+
 # Safe Terminal Executor / 安全终端执行器
 
 ## Core Rule: No Bare Commands — Everything Through Scripts / 核心规则：禁止裸命令——所有操作通过脚本执行
@@ -14,6 +22,27 @@ Safe wrapper for all network requests (curl/wget). Enforces timeout protection +
 | npm/pip install | Execute directly, add `--no-progress` |
 | Commands estimated >30s | **Forbidden** — split or generate script |
 | `git add/commit/push` | Execute directly |
+
+## Lightweight Fast Track / 轻量快速通道（V2.6）
+
+Commands meeting ALL of the following can run directly — no `.cjs` script needed / 满足以下全部条件的命令可直接运行，无需生成脚本：
+
+- **Single-line** `curl`/`wget` with built-in timeout (`--connect-timeout N --max-time N`) / 单行命令且自带超时参数
+- **No pipe** (`|`) or redirect (`>`) / 无管道或重定向
+- Response expected **< 10 lines** / 预期响应少于10行
+- **NOT writing to a file** (no `-o` or `>`) / 不写入文件
+
+```bash
+# ✅ Allowed（自带超时 + 无管道 + 只读）
+curl --connect-timeout 5 --max-time 10 https://example.com/api/health
+
+# ❌ Still forbidden（无超时 / 有管道 / 写文件）
+curl https://example.com          # missing timeout
+curl ... | bash                   # dangerous pipe
+curl -o output.txt ...            # writes to file
+```
+
+> **Why**: For quick health checks, generating a full `.cjs` script adds unnecessary friction. But timeout is non-negotiable. / 快速健康检查不必每次都生成完整脚本，但超时保护不可妥协。
 
 ## 5-Step Workflow
 
