@@ -1,0 +1,27 @@
+# ============================================
+# Vibe Coding Rules - .gitignore
+# GitHub 公开仓库需要忽略的本地开发文件
+# ============================================
+
+# CodeBuddy 本地工作区数据（不公开）
+_codebuddy/
+
+# 本地 Memory 自愈触发器（自动生成，用户项目用，不含在开源包里）
+MEMORY_BOOTSTRAP.md
+
+# OS 系统文件
+Thumbs.db
+.DS_Store
+Desktop.ini
+
+# Python
+__pycache__/
+*.pyc
+*.pyo
+
+# Node
+node_modules/
+
+# IDE
+.vscode/
+.idea/

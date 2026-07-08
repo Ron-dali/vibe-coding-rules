@@ -1,12 +1,13 @@
 ---
 name: pipeline-init
-version: 2.6.0
+version: 2.7.0
 ---
 
-# pipeline-init — Project Initialization Wizard V2.6
+# pipeline-init — Project Initialization Wizard V2.7
 
 > Conversational project info collection → dependency detection → scaffold creation → pipeline template fork → ready in one go.
 > V2.6 adds Step -1: Platform Detection → Memory Self-Heal → Project State Detection with three-path handling.
+> V2.7 softens Memory seeding: discover + suggest, not force-write. Cross-platform compatibility first.
 
 ## Trigger Conditions
 
@@ -46,10 +47,13 @@ Store detected `memoryPath` for use in Step -1.a and Step 6.
    - `"开发文档标准路径"` or `"Dev doc standard paths"`
    - `"面包屑规则"` or `"breadcrumb"`
    - `"项目初始化状态"` or `"已初始化"` or `"initialization status"`
-3. If ANY section is missing → **auto-repair immediately** — do NOT ask user
-4. Auto-repair: read template from `references/memory-template.md` and append missing sections to `memoryPath`
-5. Record in log: `self-healed: [list of repaired sections]`
-6. If file does not exist → create it with full template
+3. If ANY section is missing → **detect and report** (V2.7: do NOT auto-write without confirmation)
+4. Report missing sections to user: "发现 Memory 文件缺少 [N] 个关键段落：[list]。是否自动补全？(是 / 跳过)"
+5. Only write to `memoryPath` after explicit user confirmation
+6. If file does not exist → ask: "没有检测到 Memory 文件，要创建吗？(是 / 先不要)"
+7. Record in log: `self-healed: [list]` or `self-heal-skipped: [list]`
+
+**Why V2.7 changed from auto-write to confirm / 为什么改为确认而非自动写入**: Different platforms have different memory file formats (`.mdc` for Cursor, `.codebuddy/memory/` for CodeBuddy, `CLAUDE.md` for Claude Code). Blind auto-writing can break platform-specific syntax or interfere with user's existing configuration. Discovery is universal; writing requires consent.
 
 **File format adaptation**:
 - `.mdc` files (Cursor): add YAML frontmatter (`---\ndescription: Vibe Coding Rules\nalwaysApply: true\n---`) before markdown
@@ -125,7 +129,7 @@ On failure: provide plain-language guides. Mark missing items for later.
 
 ### Step 3-5: Create Structure + Fork Template + Populate pipeline.json
 
-Create `.ai-pipeline/` with `pipeline.json`, `VERSION` (2.6.0), and self-check references.
+Create `.ai-pipeline/` with `pipeline.json`, `VERSION` (2.7.0), and self-check references.
 Fork `self-check` and `changelog` Skill templates. Populate project config.
 Write `README.md` with proper language and no hardcoded versions.
 

@@ -1,4 +1,4 @@
-## Vibe Coding Rules V2.6 — 自动触发器
+## Vibe Coding Rules V2.7 — 自动触发器
 
 > 以下内容由 install.bat 自动写入。删除本段即卸载触发器。
 

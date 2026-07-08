@@ -1,15 +1,15 @@
 ---
 name: coding-principles
-description: Mandatory activation — 3 Pre-Gates + 6 Principles + 3 Traps layered discipline system. V2.6 adds Three-Question self-check, Repeat-Bug cap, File-Size decision, Intent Anchor pre-judgment. Regardless of task type, self-check all before outputting any code.
-tags: [ai-coding, programming-principles, code-quality, mandatory, breadcrumb, pre-gate, discipline]
-version: 2.6.0
+description: Mandatory activation — 3 Pre-Gates + 6 Principles + 3 Traps layered discipline system. V2.7 adds Multi-Stack Detection (Python/Rust/Go traps) + Change-Size-Based L1/L2/L3 tiering. Regardless of task type, self-check all before outputting any code.
+tags: [ai-coding, programming-principles, code-quality, mandatory, breadcrumb, pre-gate, discipline, multi-stack, progressive-adoption]
+version: 2.7.0
 
 ---
 
 # Mandatory: AI Coding Discipline / AI编程纪律（每次对话强制激活）
 
-> **Mandatory rule. Every coding session executes three-layer discipline: Pre-Gates → 6 Principles → 3 Traps.**
-> **强制纪律。每次编码会话必须执行三层体系：前置门 → 六大原则 → 三大陷阱。**
+> **Mandatory rule. Every coding session executes three-layer discipline: Pre-Gates → 6 Principles → 3 Traps. V2.7 adds Multi-Stack Detection + Progressive L1/L2/L3 Activation.**
+> **强制纪律。每次编码会话必须执行三层体系：前置门 → 六大原则 → 三大陷阱。V2.7 新增多技术栈陷阱检测 + 按改动大小分层激活。**
 
 ## Usage Rules / 使用规则
 
@@ -262,6 +262,112 @@ Schema changes over time — hardcoded fields cause new fields to be lost.
 POST upsert 接口的更新逻辑必须动态获取字段名，不可硬编码具体字段。
 因为schema会变，硬编码字段会导致新字段丢失。
 ```
+
+---
+
+## Layer 4: Multi-Stack Trap Detection / 第四层：多技术栈陷阱检测 (V2.7 NEW)
+
+> Not all projects are JavaScript. Different languages have their own "foot-guns" — patterns that look correct but silently cause bugs.
+> 不是所有项目都用 JavaScript。不同语言有各自的"暗坑"——看起来正确但悄悄出错的模式。
+
+### Python Traps / Python 陷阱
+
+```python
+# ❌ Trap P1: Mutable default arguments / 可变默认参数
+def add_item(item, items=[]):  # BUG: items shared across all calls!
+    items.append(item)
+    return items
+
+# ✅ Correct / 正确:
+def add_item(item, items=None):
+    if items is None:
+        items = []
+    items.append(item)
+    return items
+
+# ❌ Trap P2: Late Binding Closures / 延迟绑定闭包
+funcs = [lambda x=i: x for i in range(3)]  # BUG: all return 2!
+# ✅ Correct / 正确:
+funcs = [lambda x=i: x for i in range(3)]  # actually still wrong...
+# Really correct:
+funcs = [(lambda v: lambda: v)(i) for i in range(3)]
+
+# ❌ Trap P3: `is` vs `==` for value comparison / is用于值比较
+if x is 1000:  # BUG: small ints cached but 1000 might not be
+# ✅ Correct / 正确:
+if x == 1000:
+```
+
+### Rust Traps / Rust 陷阱
+
+```rust
+// ❌ Trap R1: Unbounded collect() on huge iterators / 无界collect()
+let all: Vec<_> = huge_file.lines().collect();  // OOM risk!
+// ✅ Correct: use iterators lazily / 惰性迭代
+for line in huge_file.lines() { /* process one */ }
+
+// ❌ Trap R2: Clone in hot loop instead of borrow / 热循环中clone而非借用
+for item in items.clone() {  // unnecessary clone
+// ✅ Correct:
+for item in &items {  // borrow instead
+```
+
+### Go Traps / Go 陷阱
+
+```go
+// ❌ Trap G1: Loop variable capture in goroutines / goroutine闭包捕获循环变量
+for _, item := range items {
+    go func() {
+        process(item)  // BUG: all use last item!
+    }()
+}
+// ✅ Correct / 正确:
+for _, item := range items {
+    item := item  // capture per iteration
+    go func() {
+        process(item)
+    }()
+}
+
+// ❌ Trap G2: Nil interface != nil concrete type / nil接口 ≠ nil具体类型
+var p *MyStruct = nil
+var i MyInterface = p
+if i != nil {  // BUG: true! Interface is non-nil with nil concrete
+```
+
+### Detection Rule / 检测规则
+
+When opening a project file for modification:
+1. Detect file extension → activate corresponding language trap checklist
+2. `.py` → check P1/P2/P3 | `.rs` → check R1/R2 | `.go` → check G1/G2
+3. `.js`/`.ts` → standard Traps A/B/C (Layer 3) still apply
+4. Unknown language → skip multi-stack check, but still apply universal Principles
+
+---
+
+## Progressive Activation by Change Size / 按改动大小分层激活 (V2.7 NEW)
+
+> Not every change needs the full three-layer discipline. Match depth to change impact.
+> 不是每次改动都需要三层全开。按改动影响面匹配合适的深度。
+
+```
+Change size assessment / 改动规模评估:
+  ├── ≤ 3 files + ≤ 30 net lines → L1 Lightweight / 轻量
+  │   Execute: Pre-Gate 1 (Three Questions) + Principles 1-5 (skip full Gate 2/3)
+  │   执行：前置门1（三问三答）+ 原则1-5（跳过高开销的门2/3）
+  │
+  ├── 3-10 files OR involves routes/data-flow → L2 Standard / 标准
+  │   Execute: All 3 Pre-Gates + All 6 Principles + All 3 Traps
+  │   执行：全部前置门 + 全部六大原则 + 全部三大陷阱
+  │
+  └── > 10 files OR new feature/refactor → L3 Full / 完整
+      Execute: Full L2 + Intent Anchor Pre-Judgment explicit output required
+      执行：完整L2 + 意图锚点预判必须显式输出
+```
+
+**L1 skip rules / L1 可跳过**: Gate 2 (Repeat Bug — not relevant for tiny fixes), Breadcrumb scan (small change rarely affects coupling)
+**L2 minimum**: All gates + principles + traps must run. User can upgrade to L3 manually: "用完整L3"
+**L3 required**: New feature dev, architecture refactor, cross-module changes
 
 ---
 

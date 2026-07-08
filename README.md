@@ -1,4 +1,4 @@
-# Vibe Coding Rules V2.6.0
+# Vibe Coding Rules V2.7.0
 
 > **AI 写代码最大的敌人，是它自己——它会忘记昨天修好的 Bug，会在同一个坑里反复跌倒。**
 >

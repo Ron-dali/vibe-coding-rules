@@ -1,18 +1,18 @@
 ---
 name: self-check
-description: Mandatory post-code-change self-check checklist. Includes 28 universal programming discipline rules, code-type index matrix, configurable registration/truncation/dual-entry checks, V2.5 four-hop chain loop + breadcrumb auto-seeding, V2.6 integrity gate (prevents paper-only false completion). Triggers after every code change. Supports pipeline.json project configuration.
-tags: [self-check, code-review, checklist, quality, pipeline, breadcrumb, integrity-gate]
-version: 2.6.0
+description: Mandatory post-code-change self-check checklist. Includes 28 universal programming discipline rules, code-type index matrix, configurable registration/truncation/dual-entry checks, V2.5 four-hop chain loop + breadcrumb auto-seeding, V2.6 integrity gate (prevents paper-only false completion), V2.7 failure recovery mode + graceful degradation. Triggers after every code change. Supports pipeline.json project configuration.
+tags: [self-check, code-review, checklist, quality, pipeline, breadcrumb, integrity-gate, failure-recovery]
+version: 2.7.0
 
 ---
 
-# Post-Code-Change Self-Check V2.6 / 代码修改后自检 V2.6
+# Post-Code-Change Self-Check V2.7 / 代码修改后自检 V2.7
 
 ## Overview / 概述
 
-每次代码修改后的强制自检流程。逐项遍历 28 条规则，防止重复已知 Bug 模式。V2.5 新增面包屑自动播种，V2.6 新增完整性阻断点（防纸面自检伪完成）。
+每次代码修改后的强制自检流程。逐项遍历 28 条规则，防止重复已知 Bug 模式。V2.5 新增面包屑自动播种，V2.6 新增完整性阻断点（防纸面自检伪完成），V2.7 新增失败恢复模式 + 优雅降级。
 
-Mandatory self-check process after every code change. Iterates through 28 rules item by item to prevent repeating known bug patterns. V2.5 adds breadcrumb auto-seeding, V2.6 adds integrity gate (prevents paper-only false completion).
+Mandatory self-check process after every code change. Iterates through 28 rules item by item to prevent repeating known bug patterns. V2.5 adds breadcrumb auto-seeding, V2.6 adds integrity gate (prevents paper-only false completion), V2.7 adds failure recovery + graceful degradation.
 
 ## Trigger Conditions (read from pipeline.json)
 
@@ -219,6 +219,56 @@ After Step 6.5 completes, before Step 7, verify item-by-item / 逐项确认：
 
 **Why this gate is necessary / 为什么需要这个门禁**: Without it, the AI's natural tendency to stop after analytical steps (all reads/diffs/logic checks feel like "completion") will cause the pipeline to silently truncate at Step 6.5. This gate forces the mode switch from analysis to execution.
 
+### Step 6.7: Failure Recovery Mode / 失败恢复模式 (V2.7 NEW)
+
+> When self-check finds too many violations, don't block delivery — group and prioritize. This prevents the pipeline from becoming a bottleneck on legacy codebases.
+> 自检发现过多违规时，不要阻塞交付——分组优先级处理。防止流水线在遗留代码上变成瓶颈。
+
+**Activation threshold / 激活阈值**: ≥ 5 violations found in a single self-check run.
+
+When triggered:
+```
+┌── Failure Recovery Grouping / 失败分组 ──────────────────────
+│
+│ 🔴 HARD (must fix before merge / 合并前必须修):
+│   [list violations that would cause runtime errors or data loss]
+│   [列出会导致运行时错误或数据丢失的违规]
+│
+│ 🟡 SOFT (fix in next session / 下次修改时修):
+│   [list violations that are quality issues but won't break]
+│   [列出质量缺陷但不影响运行的问题]
+│
+│ ⚪ BASELINE (record as tech debt / 记录为技术债务):
+│   [list violations that predate this change]
+│   [列出本次改动之前就存在的违规]
+│
+│ Decision / 决策:
+│ □ HARD = 0 → ✅ Proceed to Step 7 (testing) / 继续到步骤7
+│ □ HARD > 0 → 🛑 Fix HARD items → re-check → then proceed
+│ □ SOFT + BASELINE → Log to changelog, do NOT block delivery
+│
+└──────────────────────────────────────────────────────────────
+```
+
+**Key principle / 关键原则**:
+- Only HARD violations block the pipeline. SOFT + BASELINE are recorded but don't halt.
+- BASELINE items are auto-marked for re-check on next edit of the same file.
+- If the same BASELINE item appears 3+ times across sessions → upgrade to SOFT.
+
+### Step 6.8: Graceful Degradation / 优雅降级 (V2.7 NEW)
+
+> The pipeline should never crash because optional infrastructure is missing. Degrade gracefully instead of blocking entirely.
+> 流水线不应因为可选的基建缺失而崩溃。优雅降级而非完全阻断。
+
+| Missing Component / 缺失组件 | Degradation Behavior / 降级行为 |
+|:--|:--|
+| `开发文档/` directory does not exist | Skip Step 3 (cross-validation), 🍞 breadcrumbs write to file headers only, print ⚠️ "Dev docs not found — breadcrumb 📖 links disabled" |
+| `pipeline.json` not configured | Skip Steps 1, 4 (architecture/truncation), run Steps 2, 5-7 in generic mode |
+| Test directory `{{pipeline.paths.tests}}` empty | Replace Step 7 with manual verification prompt, do NOT block |
+| `.ai-pipeline/` does not exist (first run) | Skip Step 6.5 (trust-tier), run remaining steps in baseline mode |
+
+**Degradation golden rule / 降级黄金守则**: Always print which steps were skipped and why. Never silently skip.
+
 ### Step 7: Automated Testing / 自动化测试 (mandatory when gate passes)
 
 {{#if pipeline.skills.webTesting.enabled}}
@@ -254,6 +304,8 @@ self-check (post-code check) ← This Skill
     ├── Step 6: incident pattern match
     ├── Step 6.5: trust-tier check
     ├── Step 6.6: 🛑 integrity gate (V2.6 — blocks if testing not queued)
+    ├── Step 6.7: 🔄 failure recovery mode (V2.7 — HARD/SOFT/BASELINE grouping)
+    ├── Step 6.8: ⚠️ graceful degradation (V2.7 — skip missing infra, never crash)
     ↓
 web-testing (automated testing, mandatory when gate passes)
     ↓

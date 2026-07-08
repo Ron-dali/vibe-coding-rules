@@ -1,5 +1,5 @@
 {
-  "version": "2.6.0",
+  "version": "2.7.0",
   "project": {
     "name": "My Project",
     "type": "web",
@@ -70,9 +70,18 @@
       "note": "Prevents context bloat. When limits hit, lowest-confidence rules demoted first. Stale SOFT rules demoted if not triggered in N sessions."
     },
     "shareContact": {
-      "phone": "",
+      "email": "",
       "projectName": "",
-      "note": "Opt-in: fill in your phone/project name to enable sharing. Empty = no share block output."
+      "note": "Opt-in: fill in your email/project name to enable sharing. Empty = no share block output. Email preferred over phone for privacy."
+    },
+    "progressiveAdoption": {
+      "enabled": true,
+      "note": "V2.7: L1 (≤3 files, ≤30 lines), L2 (3-10 files), L3 (>10 files or new feature)",
+      "levels": {
+        "L1": { "maxFiles": 3, "maxLines": 30, "skills": ["coding-principles"], "description": "Lightweight: small fixes, CSS tweaks" },
+        "L2": { "maxFiles": 10, "maxLines": 200, "skills": ["coding-principles", "self-check"], "description": "Standard: medium changes, cross-module bug fixes" },
+        "L3": { "maxFiles": 999, "maxLines": 9999, "skills": ["coding-principles", "self-check", "web-testing", "changelog"], "description": "Full pipeline: new features, refactors, architecture changes" }
+      }
     }
   },
   "dependencies": {
