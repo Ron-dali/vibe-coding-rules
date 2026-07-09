@@ -1,13 +1,14 @@
 ---
 name: pipeline-init
-version: 2.7.0
+version: 2.8.0
 ---
 
-# pipeline-init — Project Initialization Wizard V2.7
+# pipeline-init — Project Initialization Wizard V2.8
 
 > Conversational project info collection → dependency detection → scaffold creation → pipeline template fork → ready in one go.
 > V2.6 adds Step -1: Platform Detection → Memory Self-Heal → Project State Detection with three-path handling.
 > V2.7 softens Memory seeding: discover + suggest, not force-write. Cross-platform compatibility first.
+> V2.8 fixes Path C: adds user confirmation + language selection, aligns directory structure with template (removes 待办事项, adds 04-08 dirs).
 
 ## Trigger Conditions
 
@@ -91,27 +92,44 @@ Proceed with standard pipeline-init workflow (Step 0 through Step 7 below).
 
 #### Path C: Existing Project Without Docs — Bootstrap
 
-1. Create standard dev doc directory structure:
+0. **Ask user confirmation before creating**: "检测到项目缺少开发文档目录。是否自动创建标准结构？
+   （创建后将扫描现有代码，生成接口契约骨架和文件索引）
+   ① 自动创建  ② 跳过（后续可手动执行「初始化流水线」）"
+   → If user says "② skip" → exit with message: "已跳过。需要时可以说'初始化开发文档'来手动触发。"
+   → If user says "① create" → proceed:
+
+1. **Language selection first**: Run Phase 0 of `references/init-dialog.md` to ask user's preferred language (中文 / English / 日本語 / 其他). All generated docs MUST use the selected language.
+
+2. Create standard dev doc directory structure (aligned with `templates/开发文档管理.md`):
    ```
    开发文档/
    ├── 00-必读/
-   │   └── 开发文档管理.md     (create from template)
+   │   └── 开发文档管理.md     (create from template, in selected language)
    ├── 01-变更日志/
-   ├── 02-项目参考/
-   ├── 03-架构设计/
-   ├── 04-方案设计/
-   └── 待办事项/
+   ├── 02-架构设计/            (条件·项目≥3模块时创建)
+   ├── 03-方案设计/            (条件·有复杂方案决策时创建)
+   ├── 04-接口文档/            (条件·有HTTP/SSE/WS接口时创建)
+   ├── 05-部署运维/            (条件·有部署流程时创建)
+   ├── 06-Agent模板/           (自生长·项目涉及LLM/Agent时创建)
+   ├── 07-产品与合规/          (自生长·项目需合规备案时创建)
+   ├── 08-项目参考/            (可选)
+   ├── 归档/
+   └── 开发者自创工具/
    ```
-2. Create `开发文档管理.md` with proper structure (decision tree + index)
-3. Scan existing code and auto-populate:
+
+3. Create `开发文档管理.md` from `templates/开发文档管理.md` in the selected language.
+
+4. Scan existing code and auto-populate:
    - Scan for Express routes → write to `00-必读/接口契约.md` skeleton
    - Scan for tool/module definitions → write code file index
    - Mark gaps as `<!-- TODO: 待补充 -->`
-4. Run first mandatory baseline self-check:
+
+5. Run first mandatory baseline self-check:
    - Execute full self-check cycle on existing code
    - Write findings to `01-变更日志/变更日志-YYYY-MM-DD.md`
    - Mark any issues as "baseline finding — not a regression"
-5. Report to user: "I've created the dev docs structure and ran an initial self-check. Here's what I found..."
+
+6. Report to user: "I've created the dev docs structure and ran an initial self-check. Here's what I found..."
 
 ### Step 0: Language Selection
 
@@ -129,7 +147,7 @@ On failure: provide plain-language guides. Mark missing items for later.
 
 ### Step 3-5: Create Structure + Fork Template + Populate pipeline.json
 
-Create `.ai-pipeline/` with `pipeline.json`, `VERSION` (2.7.0), and self-check references.
+Create `.ai-pipeline/` with `pipeline.json`, `VERSION` (2.8.0), and self-check references.
 Fork `self-check` and `changelog` Skill templates. Populate project config.
 Write `README.md` with proper language and no hardcoded versions.
 
