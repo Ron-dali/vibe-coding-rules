@@ -6,6 +6,10 @@
 >
 > **AI's biggest enemy is itself — it forgets the bugs it fixed yesterday.**
 > 6 self-evolving Skills that install "code discipline" into AI agents. Pre-check → Safe exec → Post-check → Auto-test → Changelog. Closed loop, every time.
+
+<p align="center">
+  <b>猸?瀵逛綘鏈夌敤锛熺偣涓?Star 璁╂洿澶氬紑鍙戣€呯湅鍒帮紒If useful, a Star helps more devs find this.</b>
+</p>
 
 ---
 
