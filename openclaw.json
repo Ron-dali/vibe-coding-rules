@@ -1,7 +1,7 @@
 {
   "name": "vibe-coding-rules",
   "version": "2.7.0",
-  "description": "Vibe Coding Rules V2.7 - 🍞面包屑自动播种、信任分级规则自动进化、一键项目初始化、完整性阻断点、渐进式采纳L1/L2/L3、失败恢复模式、多技术栈检测",
+  "description": "🛡️ Stop AI from forgetting yesterday's bugs. 6 self-evolving coding discipline Skills: breadcrumb memory, auto rule growth, progressive L1/L2/L3, pre-check → safe-exec → 28-rule post-check → auto-test → changelog. Closed-loop delivery. | 给AI装上编程纪律：🍞面包屑记忆永不遗忘、规则自进化越用越聪明、渐进式采纳不浪费上下文、改前自查→改后自检→自动测试→变更记录，一条龙闭环交付。由代码小白用AI写14万行代码的踩坑经验沉淀。",
 
   "license": "Apache 2.0",
   "tags": ["ai-coding", "pipeline", "code-quality", "self-check", "testing", "changelog", "self-growth", "auto-init", "breadcrumbs", "progressive-adoption", "failure-recovery", "multi-stack"],
