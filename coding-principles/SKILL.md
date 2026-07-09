@@ -2,7 +2,7 @@
 name: coding-principles
 description: Mandatory activation — 3 Pre-Gates + 6 Principles + 3 Traps layered discipline system. V2.7 adds Multi-Stack Detection (Python/Rust/Go traps) + Change-Size-Based L1/L2/L3 tiering. Regardless of task type, self-check all before outputting any code.
 tags: [ai-coding, programming-principles, code-quality, mandatory, breadcrumb, pre-gate, discipline, multi-stack, progressive-adoption]
-version: 2.7.0
+version: 2.8.0
 
 ---
 
@@ -105,7 +105,11 @@ Exemptions / 豁免:
    - `📖` entries → these docs contain related design details → read them / 关联设计文档，需要读
    - `@GOTCHA` entries → known traps in this code → avoid them / 已知陷阱，避开
    - `@BUGFIX` entries → historical bugs fixed here → don't regress / 历史修复记录，别回退
-3. **If NOT found** → mark this file for breadcrumb seeding (self-check Step 0.6 will handle it after changes) / 标记此文件缺面包屑，改后必须补设
+3. **If NOT found** → 🚨 **DO NOT modify code yet! Seed breadcrumbs first (30 seconds max):** / **禁止直接改代码！先播种面包屑：**
+   a. **Search linked files / 搜联动文件**: `search_content` for `import`/`require` of this file in the project → write `@COUPLED`
+   b. **Search design docs / 搜设计文档**: `search_content` in dev docs for this file name or module name → write `📖`, read key decision docs if found
+   c. **Check git history / 查历史Bug**: `git log --oneline -10 <this file>` → recent bug fixes → write `@BUGFIX`
+   d. After completing a-c, insert the 🍞 header block (format below), then proceed with the code change / 完成以上三步后插入🍞头部，再改代码
 4. **Use parsed breadcrumbs to expand change scope**: add @COUPLED files to your "must check" list before making changes / 把联动文件加入检查清单
 
 **Breadcrumb standard format / 🍞 面包屑标准格式** (design principle: AI understands at a glance, no external docs needed / AI一眼就能理解，不需要读任何外部文档):
