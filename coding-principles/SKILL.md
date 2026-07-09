@@ -1,8 +1,8 @@
 ---
 name: coding-principles
-description: Mandatory activation — 3 Pre-Gates + 6 Principles + 3 Traps layered discipline system. V2.7 adds Multi-Stack Detection (Python/Rust/Go traps) + Change-Size-Based L1/L2/L3 tiering. Regardless of task type, self-check all before outputting any code.
-tags: [ai-coding, programming-principles, code-quality, mandatory, breadcrumb, pre-gate, discipline, multi-stack, progressive-adoption]
-version: 2.8.0
+description: Mandatory activation — 3 Pre-Gates + 6 Principles + 3 Traps layered discipline system. V2.9 adds breadcrumb exemption from 300-line count + self-check rule 29 file-size auto-check. Regardless of task type, self-check all before outputting any code.
+tags: [ai-coding, programming-principles, code-quality, mandatory, breadcrumb, pre-gate, discipline, file-size-check]
+version: 2.9.0
 
 ---
 
@@ -78,6 +78,7 @@ Before touching any file, check / 动手前判断:
 1. Target file current line count > 300? / 目标文件当前超过300行？
    → YES: split first, then modify (never append to large files)
    → 是：先拆分再修改，不往大文件追加
+   → Note / 注：🍞 breadcrumb headers (~15-20 lines) do NOT count toward 300 / 🍞 面包屑头部不计入300行上限
 2. Is this a new feature or modifying existing? / 这是新增功能还是修改现有？
    → New feature: MUST create new file/module / 新增功能：必须新建文件/模块
    → Modify existing: consider splitting first if file is large / 修改现有：优先考虑先拆分再修改
@@ -86,6 +87,10 @@ Exemptions / 豁免:
   - Pure config/declaration/boilerplate: relax to 500 lines / 纯配置/声明/框架代码：可放宽至500行
   - Highly cohesive algorithms (state machines, compiler cores): relax to 400 lines / 高度内聚算法：可至400行
   - Auto-generated code: don't count / 框架自动生成代码：不计入
+  - 🍞 Breadcrumb headers (metadata): don't count / 🍞 面包屑头部（元数据）：不计入
+
+Post-change auto-check (self-check rule 29): after modifying a file, if functional code still > 300 lines → ⚠️ warn suggest split
+改后自检强制检查（规则 29）：改后自检时，若改动后功能代码仍超 300 行 → ⚠️ 警告建议拆分
 ```
 
 ---

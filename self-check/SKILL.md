@@ -1,8 +1,8 @@
 ---
 name: self-check
-description: Mandatory post-code-change self-check checklist. Includes 28 universal programming discipline rules, code-type index matrix, configurable registration/truncation/dual-entry checks, V2.5 four-hop chain loop + breadcrumb auto-seeding, V2.6 integrity gate (prevents paper-only false completion), V2.7 failure recovery mode + graceful degradation. Triggers after every code change. Supports pipeline.json project configuration.
-tags: [self-check, code-review, checklist, quality, pipeline, breadcrumb, integrity-gate, failure-recovery]
-version: 2.7.0
+description: Mandatory post-code-change self-check checklist. Includes 29 universal programming discipline rules, code-type index matrix, configurable registration/truncation/dual-entry checks, V2.5 four-hop chain loop + breadcrumb auto-seeding, V2.6 integrity gate (prevents paper-only false completion), V2.7 failure recovery mode + graceful degradation, V2.9.0 adds rule 29 file-size auto-check. Triggers after every code change. Supports pipeline.json project configuration.
+tags: [self-check, code-review, checklist, quality, pipeline, breadcrumb, integrity-gate, failure-recovery, file-size-check]
+version: 2.9.0
 
 ---
 
@@ -10,9 +10,9 @@ version: 2.7.0
 
 ## Overview / 概述
 
-每次代码修改后的强制自检流程。逐项遍历 28 条规则，防止重复已知 Bug 模式。V2.5 新增面包屑自动播种，V2.6 新增完整性阻断点（防纸面自检伪完成），V2.7 新增失败恢复模式 + 优雅降级。
+每次代码修改后的强制自检流程。逐项遍历 29 条规则，防止重复已知 Bug 模式。V2.5 新增面包屑自动播种，V2.6 新增完整性阻断点（防纸面自检伪完成），V2.7 新增失败恢复模式 + 优雅降级，V2.9 新增规则29 文件行数检查。
 
-Mandatory self-check process after every code change. Iterates through 28 rules item by item to prevent repeating known bug patterns. V2.5 adds breadcrumb auto-seeding, V2.6 adds integrity gate (prevents paper-only false completion), V2.7 adds failure recovery + graceful degradation.
+Mandatory self-check process after every code change. Iterates through 29 rules item by item to prevent repeating known bug patterns. V2.5 adds breadcrumb auto-seeding, V2.6 adds integrity gate (prevents paper-only false completion), V2.7 adds failure recovery + graceful degradation, V2.9 adds rule 29 file-size auto-check.
 
 ## Trigger Conditions (read from pipeline.json)
 
@@ -152,7 +152,7 @@ Confirm truncation limits can accommodate maximum data volume.
 Skip (no truncation points configured)
 {{/if}}
 
-### Step 5: Iterate Through 28 Rules
+### Step 5: Iterate Through 29 Rules
 
 Select relevant rules by change type. Core rule quick reference:
 
@@ -173,6 +173,7 @@ Select relevant rules by change type. Core rule quick reference:
 | 26 | Intent anchor comments (V2.3) | Any code change |
 | 27 | Code-doc linkage consistency (V2.3) | Code references doc paths |
 | 28 | 🍞 Breadcrumb auto-seeding (V2.5) | Any code change |
+| 29 | 📏 File-size check (V2.9) | Any code change |
 
 ### Step 6: Historical Incident Pattern Match
 
@@ -300,7 +301,7 @@ self-check (post-code check) ← This Skill
     ├── Step 1-2: architecture diff + schema
     ├── Step 3: implementation cross-validation (four-hop chain)
     ├── Step 4: truncation point scan
-    ├── Step 5: iterate 28 rules
+    ├── Step 5: iterate 29 rules
     ├── Step 6: incident pattern match
     ├── Step 6.5: trust-tier check
     ├── Step 6.6: 🛑 integrity gate (V2.6 — blocks if testing not queued)
